@@ -9,6 +9,84 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+model Programa {
+  id Int @id @default(autoincrement())
+  nombre String @db.VarChar(40)
+  abreviacion String @db.VarChar(10)
+  fichas Ficha[]
+}
+
+model Ficha {
+  codigo Int @id
+  programaId Int
+  programa Programa @relation(fields: [programaId], references: [id])
+  usuarios Usuario[]
+}
+
+model Usuario {
+  id Int @id @default(autoincrement())
+  identificacion BigInt @unique
+  primerNombre String @db.VarChar(20)
+  segundoNombre String? @db.VarChar(20)
+  primerApellido String @db.VarChar(20)
+  segundoApellido String? @db.VarChar(20)
+  correo String @db.VarChar(80) @unique
+  contrasena String @db.VarChar(60)
+  fichaId Int?
+  fechaNacimiento DateTime
+  img String @db.Text
+  ficha Ficha? @relation(fields: [fichaId], references: [codigo])
+  roles UsuarioRol[]
+}
+
+model UsuarioRol {
+  usuarioId Int
+  rolId Int
+  usuario Usuario @relation(fields: [usuarioId], references: [id])
+  rol Rol @relation(fields: [rolId], references: [id])
+  @@id([usuarioId,rolId])
+}
+
+model Rol {
+  id Int @id @default(autoincrement())
+  nombre String @db.VarChar(20)
+  descripcion String @db.VarChar(255)
+  usuarios UsuarioRol[]
+  permisos RolPermiso[]
+}
+
+model RolPermiso {
+  permisoId Int
+  rolId Int
+  permiso Permiso @relation(fields: [permisoId], references: [id])
+  rol Rol @relation(fields: [rolId], references: [id])
+  valor Boolean @default(false)
+  @@id([permisoId,rolId])
+}
+
+enum tipoPermiso {
+  read
+  write
+  update
+}
+
+model Permiso {
+  id Int @id @default(autoincrement())
+  nombre String @db.VarChar(30)
+  descripcion String @db.VarChar(255)
+  tipo tipoPermiso @default(read)
+  moduloId Int
+  modulo Modulo @relation(fields: [moduloId], references: [id])
+  roles RolPermiso[]
+}
+
+model Modulo {
+  id Int @id @default(autoincrement())
+  nombre String @db.VarChar(80)
+  descripcion String @db.VarChar(255)
+  permisos Permiso[]
 }
