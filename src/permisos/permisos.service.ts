@@ -7,7 +7,7 @@ export class PermisosService {
     
     constructor(private prismaService : PrismaService){}
 
-    async getPermisosByModule ( moduloId : number ) {
+    async getPermisosByModulo ( moduloId : number ) {
         const permisos = await this.prismaService.permiso.findMany({
             where : {
                 moduloId
@@ -32,5 +32,72 @@ export class PermisosService {
             }
         });
         return { message : "Permiso asigned successfully", newAsign};
+    }
+
+    async myPermisos (id : number) {
+        const myPermisos = await this.prismaService.rolPermiso.findMany({
+            where : {
+                rol : {
+                    usuarios : {
+                        some : {
+                            usuarioId : id
+                        }
+                    }
+                }
+            },
+            select : {
+                permiso : {
+                    select : {
+                        nombre : true,
+                        modulo : {
+                            select : {
+                                nombre : true
+                            }
+                        }
+                    }
+                }
+            }
+        })
+        const permisosName = myPermisos.map(pem => ({
+            nombre : pem.permiso.nombre,
+            modulo : pem.permiso.modulo.nombre
+        }))
+        return permisosName;
+    }
+
+    async myPermisosByModulo (usuarioId : number, moduloId : number) {
+        const myPermisos = await this.prismaService.rolPermiso.findMany({
+            where : {
+                rol : {
+                    usuarios : {
+                        some : {
+                            usuarioId
+                        }
+                    }
+                },
+                permiso : {
+                    modulo : {
+                        id : moduloId
+                    }
+                }
+            },
+            select : {
+                permiso : {
+                    select : {
+                        nombre : true,
+                        modulo : {
+                            select : {
+                                nombre : true
+                            }
+                        }
+                    }
+                }
+            }
+        })
+        const permisosName = myPermisos.map(pem => ({
+            nombre : pem.permiso.nombre,
+            modulo : pem.permiso.modulo.nombre
+        }))
+        return permisosName;
     }
 }

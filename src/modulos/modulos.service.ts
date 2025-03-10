@@ -11,6 +11,14 @@ export class ModulosService {
         return await this.prismaService.modulo.findMany();
     }
 
+    async accessModulo(nombre : string) : Promise<any> {
+        return await this.prismaService.modulo.findUnique({
+            where : {
+                nombre
+            }
+        })
+    }
+
     async createModulo(data : CreateModuloDto) : Promise<any> {
         await this.prismaService.modulo.create({ data });
         return { message : "Modulo created successfully." };

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseBoolPipe, ParseIntPipe, Post, UseGuards, UsePipes } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseBoolPipe, ParseIntPipe, Post, Request, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { PermisosService } from './permisos.service';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
@@ -10,11 +10,25 @@ export class PermisosController {
 
     constructor(private permisosService : PermisosService){}
 
-    @Get('/:moduloId')
+    @Get('/modulo/:moduloId')
     @UseGuards(AuthGuard('jwt'),RolesGuard)
     @Roles("Administrador")
-    async getPermisosByModule (@Param('moduloId',ParseIntPipe) moduloId : number ) {
-        return await this.permisosService.getPermisosByModule(moduloId);
+    async getPermisosByModulo (@Param('moduloId',ParseIntPipe) moduloId : number ) {
+        return await this.permisosService.getPermisosByModulo(moduloId);
+    }
+
+    @Get('/me')
+    @UseGuards(AuthGuard('jwt'))
+    async myPermisos(@Request() req : any){
+        const usuarioId = req.user.sub;
+        return await this.permisosService.myPermisos(usuarioId);
+    }
+
+    @Get('/me/:moduloId')
+    @UseGuards(AuthGuard('jwt'))
+    async myPermisosByModulo (@Request() req : any, @Param('moduloId',ParseIntPipe) moduloId) {
+        const usuarioId = req.user.sub;
+        return await this.permisosService.myPermisosByModulo(usuarioId,moduloId);
     }
 
     @Post()
