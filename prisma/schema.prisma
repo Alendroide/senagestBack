@@ -38,7 +38,7 @@ model Usuario {
   contrasena String @db.VarChar(60)
   fichaId Int?
   fechaNacimiento DateTime
-  img String @db.Text
+  img String? @db.Text
   ficha Ficha? @relation(fields: [fichaId], references: [codigo])
   roles UsuarioRol[]
 }
