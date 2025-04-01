@@ -34,13 +34,13 @@ export class PermisosService {
         return { message : "Permiso asigned successfully", newAsign};
     }
 
-    async myPermisos (id : number) {
+    async myPermisos (usuarioId : number) {
         const myPermisos = await this.prismaService.rolPermiso.findMany({
             where : {
                 rol : {
                     usuarios : {
                         some : {
-                            usuarioId : id
+                            id : usuarioId
                         }
                     }
                 }
@@ -71,7 +71,7 @@ export class PermisosService {
                 rol : {
                     usuarios : {
                         some : {
-                            usuarioId
+                            id : usuarioId
                         }
                     }
                 },

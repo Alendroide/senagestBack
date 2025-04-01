@@ -1,4 +1,4 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import { CanActivate, ExecutionContext, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
 import { ROLES_KEY } from '../decorators/roles.decorator';
@@ -18,11 +18,11 @@ export class RolesGuard implements CanActivate {
 
     const { user } = context.switchToHttp().getRequest();
 
-    if(!user || !user.roles) return false;
+    if(!user || !user.rol) throw new HttpException("Non existent user/role", HttpStatus.BAD_REQUEST);
 
-    const hasRole = user.roles.some(role => requiredRoles.includes(role));
+    const hasRole = requiredRoles.includes(user.rol);
 
-    if(!hasRole) return false;
+    if(!hasRole) throw new HttpException("You don't have permission to access this endpoint",HttpStatus.UNAUTHORIZED);
 
     return true;
   }

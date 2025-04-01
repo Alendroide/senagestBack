@@ -16,6 +16,14 @@ export class ModulosGuard implements CanActivate {
     const {moduloName} = req.params;
     const usuarioId = req.user.sub;
 
+    const modulo = await this.prismaService.modulo.findUnique({
+      where : {
+        nombre : moduloName
+      }
+    })
+
+    if(!modulo) throw new HttpException("This module doesn't exist",HttpStatus.NOT_FOUND);
+
     const permisos = await this.prismaService.permiso.findMany({
       where : {
         modulo : {
@@ -26,7 +34,7 @@ export class ModulosGuard implements CanActivate {
             rol : {
               usuarios : {
                 some : {
-                  usuarioId
+                  id : usuarioId
                 }
               }
             }

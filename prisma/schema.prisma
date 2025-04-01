@@ -37,25 +37,18 @@ model Usuario {
   correo String @db.VarChar(80) @unique
   contrasena String @db.VarChar(60)
   fichaId Int?
+  rolId Int?
   fechaNacimiento DateTime
   img String? @db.Text
   ficha Ficha? @relation(fields: [fichaId], references: [codigo])
-  roles UsuarioRol[]
-}
-
-model UsuarioRol {
-  usuarioId Int
-  rolId Int
-  usuario Usuario @relation(fields: [usuarioId], references: [id])
-  rol Rol @relation(fields: [rolId], references: [id])
-  @@id([usuarioId,rolId])
+  rol Rol? @relation(fields: [rolId], references: [id])
 }
 
 model Rol {
   id Int @id @default(autoincrement())
   nombre String @db.VarChar(20)
   descripcion String @db.VarChar(255)
-  usuarios UsuarioRol[]
+  usuarios Usuario[]
   permisos RolPermiso[]
 }
 

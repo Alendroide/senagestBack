@@ -43,7 +43,10 @@ export class AuthService {
         
         // Buscar el usuario
         const user = await this.prismaService.usuario.findUnique({
-            where : { correo : data.correo }
+            where : { correo : data.correo },
+            include : {
+                rol : true
+            }
         })
 
         // Validaciones
@@ -54,17 +57,7 @@ export class AuthService {
         throw new HttpException({ message : "Wrong password. Please try again." }, HttpStatus.UNAUTHORIZED);
 
         // Generar JWT
-        const payload = { sub : user.id, identificacion : user.identificacion.toString() , correo : user.correo };
-
-        // Añadir rol
-        const rolesObj = await this.prismaService.rol.findMany({
-            where : { usuarios : { some : { usuarioId : user.id } } },
-            select : { nombre : true }
-        })
-
-        const roles = rolesObj.map(rol => rol.nombre);
-
-        payload['roles'] = roles;
+        const payload = { sub : user.id, identificacion : user.identificacion.toString(), correo : user.correo, rol : user.rol?.nombre };
 
         // Retornar JWT
         return { access_token : this.jwtService.sign(payload) };
