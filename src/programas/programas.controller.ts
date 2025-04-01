@@ -12,14 +12,14 @@ export class ProgramasController {
 
     @Get()
     @UseGuards(AuthGuard('jwt'),RolesGuard)
-    @Roles('Administrador','Aprendiz')
+    @Roles('Aprendiz')
     async getProgramas(){
         return await this.programasService.getProgramas();
     }
 
     @Post()
     @UseGuards(AuthGuard('jwt'),RolesGuard)
-    @Roles('Administrador')
+    @Roles()
     async createPrograma(@Body() data : CreateProgramaDto) {
         return await this.programasService.createPrograma(data);
     }

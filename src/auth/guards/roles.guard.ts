@@ -20,6 +20,8 @@ export class RolesGuard implements CanActivate {
 
     if(!user || !user.rol) throw new HttpException("Non existent user/role", HttpStatus.BAD_REQUEST);
 
+    if(user.rol == 'Administrador') return true;
+
     const hasRole = requiredRoles.includes(user.rol);
 
     if(!hasRole) throw new HttpException("You don't have permission to access this endpoint",HttpStatus.UNAUTHORIZED);

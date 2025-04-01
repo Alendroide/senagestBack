@@ -13,6 +13,8 @@ export class ModulosGuard implements CanActivate {
     
     const req = context.switchToHttp().getRequest();
     
+    if(req.user.rol === 'Administrador') return true;
+
     const {moduloName} = req.params;
     const usuarioId = req.user.sub;
 
