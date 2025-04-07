@@ -57,7 +57,7 @@ export class AuthService {
         throw new HttpException({ message : "Wrong password. Please try again." }, HttpStatus.UNAUTHORIZED);
 
         // Generar JWT
-        const payload = { sub : user.id, identificacion : user.identificacion.toString(), correo : user.correo, rol : user.rol?.nombre };
+        const payload = { sub : user.id, identificacion : user.identificacion.toString(), correo : user.correo, rol : user.rol?.nombre, nombre : `${user.primerNombre} ${user.primerApellido}` };
 
         // Retornar JWT
         return { access_token : this.jwtService.sign(payload) };
