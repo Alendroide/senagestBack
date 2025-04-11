@@ -4,6 +4,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
+import { JwtPayload } from './types/jwtPayload';
 
 @Injectable()
 export class AuthService {
@@ -56,8 +57,39 @@ export class AuthService {
         if(!(await this.comparePasswords(data.contrasena, user.contrasena)))
         throw new HttpException({ message : "Wrong password. Please try again." }, HttpStatus.UNAUTHORIZED);
 
+        const modules = await this.prismaService.modulo.findMany({
+            where : {
+                permisos : {
+                    some : {
+                        roles : {
+                            some : {
+                                rol : {
+                                    usuarios : {
+                                        some : {
+                                            id : user.id
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            select : {
+                nombre : true,
+                icono : true
+            }
+        })
+
         // Generar JWT
-        const payload = { sub : user.id, identificacion : user.identificacion.toString(), correo : user.correo, rol : user.rol?.nombre, nombre : `${user.primerNombre} ${user.primerApellido}` };
+        const payload : JwtPayload = {
+            sub : user.id,
+            identificacion : user.identificacion.toString(),
+            correo : user.correo,
+            rol : user.rol?.nombre,
+            nombre : `${user.primerNombre} ${user.primerApellido}`,
+            modulos : modules
+        };
 
         // Retornar JWT
         return { access_token : this.jwtService.sign(payload) };

@@ -81,5 +81,6 @@ model Modulo {
   id Int @id @default(autoincrement())
   nombre String @db.VarChar(80) @unique
   descripcion String @db.VarChar(255)
+  icono String @default("Book")
   permisos Permiso[]
 }
