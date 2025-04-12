@@ -5,6 +5,8 @@ import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { AuthGuard } from '@nestjs/passport';
 import { ModulosGuard } from './modulos.guard';
+import { Permiso } from 'src/auth/decorators/permisos.decorator';
+import { PermisosGuard } from 'src/auth/guards/permisos.guard';
 
 @Controller('modulos')
 export class ModulosController {
@@ -24,8 +26,8 @@ export class ModulosController {
     }
 
     @Post()
-    @UseGuards(AuthGuard('jwt'),RolesGuard)
-    @Roles("Administrador")
+    @Permiso(1)
+    @UseGuards(AuthGuard('jwt'),PermisosGuard)
     async createModulo(@Body() body : CreateModuloDto) : Promise<any> {
         return await this.modulosService.createModulo(body);
     }
