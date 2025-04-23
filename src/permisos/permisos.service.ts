@@ -17,9 +17,24 @@ export class PermisosService {
     }
 
     async createPermiso (data : CreatePermisoDto) {
+        const permisoInfo = {
+            nombre : data.nombre,
+            descripcion : data.descripcion,
+            tipo : data.tipo,
+            moduloId : data.moduloId
+        }
+        
         const permiso = await this.prismaService.permiso.create({
-            data
+            data : permisoInfo
         });
+
+        await this.prismaService.rutaFront.create({
+            data : {
+                ruta : data.ruta,
+                permisoId : permiso.id
+            }
+        });
+        
         return { message : "Permiso created successfully", permiso };
     }
 

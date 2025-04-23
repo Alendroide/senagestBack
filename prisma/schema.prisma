@@ -75,6 +75,7 @@ model Permiso {
   moduloId Int
   modulo Modulo @relation(fields: [moduloId], references: [id])
   roles RolPermiso[]
+  rutafront RutaFront[]
 }
 
 model Modulo {
@@ -83,4 +84,11 @@ model Modulo {
   descripcion String @db.VarChar(255)
   icono String @default("Book")
   permisos Permiso[]
+}
+
+model RutaFront {
+  id Int @id @default(autoincrement())
+  ruta String @db.VarChar(255)
+  permisoId Int @unique()
+  permiso Permiso @relation(fields: [permisoId], references: [id])
 }
