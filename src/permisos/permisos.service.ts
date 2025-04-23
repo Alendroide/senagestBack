@@ -30,7 +30,8 @@ export class PermisosService {
 
         await this.prismaService.rutaFront.create({
             data : {
-                ruta : data.ruta,
+                nombre : data.rutaNombre,
+                ruta : data.rutaRuta,
                 permisoId : permiso.id
             }
         });

@@ -88,6 +88,7 @@ model Modulo {
 
 model RutaFront {
   id Int @id @default(autoincrement())
+  nombre String @db.VarChar(30)
   ruta String @db.VarChar(255)
   permisoId Int @unique()
   permiso Permiso @relation(fields: [permisoId], references: [id])
