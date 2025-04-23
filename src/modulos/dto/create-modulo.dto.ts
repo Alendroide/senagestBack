@@ -8,4 +8,8 @@ export class CreateModuloDto {
     @IsString()
     @MinLength(10)
     descripcion : string;
+
+    @IsString()
+    @IsOptional()
+    icono : string;
 }
