@@ -107,6 +107,7 @@ export class AuthService {
             rutafront: {
               select: {
                 ruta: true,
+                nombre : true
               },
             },
           },

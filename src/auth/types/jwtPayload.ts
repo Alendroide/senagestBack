@@ -1,6 +1,7 @@
 export type permiso = {
     rutafront : {
-        ruta : string
+        ruta : string,
+        nombre : string
     }
 }
 
