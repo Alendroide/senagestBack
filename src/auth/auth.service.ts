@@ -93,6 +93,7 @@ export class AuthService {
           where: {
             roles: {
               some: {
+                valor : true,
                 rol: {
                   usuarios: {
                     some: {
