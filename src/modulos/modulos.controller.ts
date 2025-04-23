@@ -4,7 +4,6 @@ import { CreateModuloDto } from './dto/create-modulo.dto';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { AuthGuard } from '@nestjs/passport';
-import { ModulosGuard } from './modulos.guard';
 import { Permiso } from 'src/auth/decorators/permisos.decorator';
 import { PermisosGuard } from 'src/auth/guards/permisos.guard';
 
@@ -13,14 +12,14 @@ export class ModulosController {
     constructor(private modulosService : ModulosService) {}
 
     @Get()
-    @UseGuards(AuthGuard('jwt'),RolesGuard)
-    @Roles("Administrador", "Aprendiz")
+    @Permiso(2)
+    @UseGuards(AuthGuard('jwt'),PermisosGuard)
     async getModulos() : Promise<any> {
         return await this.modulosService.getModulos();
     }
 
     @Get('/:moduloName')
-    @UseGuards(AuthGuard('jwt'),ModulosGuard)
+    @UseGuards(AuthGuard('jwt'))
     async accessModulo(@Param('moduloName') moduloName : string) : Promise<any> {
         return await this.modulosService.accessModulo(moduloName);
     }
