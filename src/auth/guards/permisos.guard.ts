@@ -20,10 +20,9 @@ export class PermisosGuard implements CanActivate {
     const [hasAccess] = await this.prismaService.rolPermiso.findMany({
       where : {
         AND : {
-          rol : {
-            nombre : user.rol
-          },
-          permisoId : permiso
+          rolId : user.rol,
+          permisoId : permiso,
+          valor : true
         }
       }
     })
