@@ -18,11 +18,11 @@ export class ModulosController {
         return await this.modulosService.getModulos();
     }
 
-    @Get('/:moduloName')
-    @UseGuards(AuthGuard('jwt'))
-    async accessModulo(@Param('moduloName') moduloName : string) : Promise<any> {
-        return await this.modulosService.accessModulo(moduloName);
-    }
+    // @Get('/:moduloName')
+    // @UseGuards(AuthGuard('jwt'))
+    // async accessModulo(@Param('moduloName') moduloName : string) : Promise<any> {
+    //     return await this.modulosService.accessModulo(moduloName);
+    // }
 
     @Post()
     @Permiso(1)

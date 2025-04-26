@@ -7,6 +7,18 @@ export class PermisosService {
     
     constructor(private prismaService : PrismaService){}
 
+    async getPermisosCategorized () {
+        const permisos = await this.prismaService.modulo.findMany({
+            select : {
+                id : true,
+                nombre : true,
+                icono : true,
+                permisos : true
+            }
+        })
+        return permisos;
+    }
+
     async getPermisosByModulo ( moduloId : number ) {
         const permisos = await this.prismaService.permiso.findMany({
             where : {

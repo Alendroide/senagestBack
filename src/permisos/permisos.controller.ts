@@ -4,11 +4,37 @@ import { PermisosService } from './permisos.service';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { CreatePermisoDto } from './dto/create-permiso.dto';
+import { PermisosGuard } from 'src/auth/guards/permisos.guard';
+import { Permiso } from 'src/auth/decorators/permisos.decorator';
 
 @Controller('permisos')
 export class PermisosController {
 
     constructor(private permisosService : PermisosService){}
+
+    // CREAR UN NUEVO PERMISO
+    @Post()
+    @Permiso(3)
+    @UseGuards(AuthGuard('jwt'),PermisosGuard)
+    async createPermiso (@Body() body : CreatePermisoDto) {
+        return await this.permisosService.createPermiso(body);
+    }
+
+    // OBTENER TODOS LOS PERMISOS EN BASE A UN MODULO
+    @Get('/bymodulo')
+    @Permiso(4)
+    @UseGuards(AuthGuard('jwt'),PermisosGuard)
+    async getPermisosCategorized () {
+        return await this.permisosService.getPermisosCategorized();
+    }
+
+    // ASIGNAR UN PERMISO A UN ROL
+    @Post('/asign/:permisoId/:rolId/:valor')
+    @UseGuards(AuthGuard('jwt'),RolesGuard)
+    @Roles("Administrador")
+    async asignPermiso (@Param('permisoId',ParseIntPipe) permisoId : number, @Param('rolId',ParseIntPipe) rolId : number , @Param('valor',ParseBoolPipe) valor : boolean ) {
+        return await this.permisosService.asignPermiso(permisoId,rolId,valor);
+    }
 
     @Get('/modulo/:moduloId')
     @UseGuards(AuthGuard('jwt'),RolesGuard)
@@ -31,17 +57,4 @@ export class PermisosController {
         return await this.permisosService.myPermisosByModulo(usuarioId,moduloId);
     }
 
-    @Post()
-    @UseGuards(AuthGuard('jwt'),RolesGuard)
-    @Roles("Administrador")
-    async createPermiso (@Body() body : CreatePermisoDto) {
-        return await this.permisosService.createPermiso(body);
-    }
-
-    @Post('/:permisoId/:rolId/:valor')
-    @UseGuards(AuthGuard('jwt'),RolesGuard)
-    @Roles("Administrador")
-    async asignPermiso (@Param('permisoId',ParseIntPipe) permisoId : number, @Param('rolId',ParseIntPipe) rolId : number , @Param('valor',ParseBoolPipe) valor : boolean ) {
-        return await this.permisosService.asignPermiso(permisoId,rolId,valor);
-    }
 }
