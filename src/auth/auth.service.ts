@@ -129,6 +129,7 @@ export class AuthService {
       sub: user.id,
       identificacion: user.identificacion.toString(),
       correo: user.correo,
+      img : user.img,
       rol: user.rol?.id,
       nombre: `${user.primerNombre} ${user.primerApellido}`,
       modulos: fixedModules,
