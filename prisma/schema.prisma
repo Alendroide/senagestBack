@@ -39,7 +39,7 @@ model Usuario {
   fichaId Int?
   rolId Int?
   fechaNacimiento DateTime
-  img String? @db.Text
+  img String @db.VarChar(255) @default("defaultpfp.png")
   ficha Ficha? @relation(fields: [fichaId], references: [codigo])
   rol Rol? @relation(fields: [rolId], references: [id])
 }

@@ -1,9 +1,11 @@
+import { Type } from "class-transformer";
 import { IsString, IsNotEmpty, IsEmail, MinLength, IsNumber, IsDateString, IsOptional, IsISO8601 } from "class-validator";
 
 export class CreateUsuarioDto {
 
     @IsNumber()
     @IsNotEmpty()
+    @Type(() => Number)
     identificacion : number;
 
     @IsString()
@@ -40,9 +42,10 @@ export class CreateUsuarioDto {
     @IsNumber()
     @IsNotEmpty()
     @IsOptional()
+    @Type(() => Number)
     fichaId?: number;
 
+    @IsOptional()
     @IsString()
-    @IsNotEmpty()
-    img: string;
+    img?: string;
 }

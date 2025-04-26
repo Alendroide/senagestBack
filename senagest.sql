@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.30, for Win64 (x86_64)
 --
--- Host: localhost    Database: senagest
+-- Host: localhost    Database: formativa
 -- ------------------------------------------------------
 -- Server version	8.0.30
 
@@ -50,9 +50,9 @@ DROP TABLE IF EXISTS `modulo`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `modulo` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `descripcion` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `icono` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Book',
+  `nombre` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `descripcion` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `icono` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Book',
   PRIMARY KEY (`id`),
   UNIQUE KEY `Modulo_nombre_key` (`nombre`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -77,9 +77,9 @@ DROP TABLE IF EXISTS `permiso`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `permiso` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `descripcion` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `tipo` enum('read','write','update') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'read',
+  `nombre` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `descripcion` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tipo` enum('read','write','update') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'read',
   `moduloId` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `Permiso_moduloId_fkey` (`moduloId`),
@@ -106,8 +106,8 @@ DROP TABLE IF EXISTS `programa`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `programa` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `abreviacion` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nombre` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `abreviacion` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -131,8 +131,8 @@ DROP TABLE IF EXISTS `rol`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rol` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `descripcion` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nombre` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `descripcion` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -184,9 +184,9 @@ DROP TABLE IF EXISTS `rutafront`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rutafront` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `ruta` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ruta` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `permisoId` int NOT NULL,
-  `nombre` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nombre` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `RutaFront_permisoId_key` (`permisoId`),
   CONSTRAINT `RutaFront_permisoId_fkey` FOREIGN KEY (`permisoId`) REFERENCES `permiso` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
@@ -213,16 +213,16 @@ DROP TABLE IF EXISTS `usuario`;
 CREATE TABLE `usuario` (
   `id` int NOT NULL AUTO_INCREMENT,
   `identificacion` bigint NOT NULL,
-  `primerNombre` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `segundoNombre` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `primerApellido` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `segundoApellido` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `correo` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `contrasena` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `primerNombre` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `segundoNombre` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `primerApellido` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `segundoApellido` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `correo` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `contrasena` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `fichaId` int DEFAULT NULL,
   `rolId` int DEFAULT NULL,
   `fechaNacimiento` datetime(3) NOT NULL,
-  `img` text COLLATE utf8mb4_unicode_ci,
+  `img` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'defaultpfp.png',
   PRIMARY KEY (`id`),
   UNIQUE KEY `Usuario_identificacion_key` (`identificacion`),
   UNIQUE KEY `Usuario_correo_key` (`correo`),
@@ -252,4 +252,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-23 10:15:21
+-- Dump completed on 2025-04-26 14:32:37

@@ -22,7 +22,7 @@ export class AuthService {
     return bcrypt.compare(password, hash);
   }
 
-  async register(data: CreateUsuarioDto): Promise<any> {
+  async register(data: CreateUsuarioDto, file: Express.Multer.File | undefined): Promise<any> {
     // Validaciones
     const ficha = await this.prismaService.ficha.findUnique({
       where: { codigo: data.fichaId },
@@ -39,7 +39,7 @@ export class AuthService {
 
     // Crear en la base de datos
     await this.prismaService.usuario.create({
-      data: { ...data, contrasena: hash },
+      data: { ...data, contrasena: hash, img: file ? file.filename : undefined },
     });
 
     return { message: 'User registered successfully.' };

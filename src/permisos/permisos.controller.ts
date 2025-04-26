@@ -12,7 +12,7 @@ export class PermisosController {
 
     constructor(private permisosService : PermisosService){}
 
-    // CREAR UN NUEVO PERMISO
+    // CREATE NEW PERMISO
     @Post()
     @Permiso(3)
     @UseGuards(AuthGuard('jwt'),PermisosGuard)
@@ -20,7 +20,7 @@ export class PermisosController {
         return await this.permisosService.createPermiso(body);
     }
 
-    // OBTENER TODOS LOS PERMISOS EN BASE A UN MODULO
+    // GET ALL PERMISOS GROUPED BY MODULO
     @Get('/bymodulo')
     @Permiso(4)
     @UseGuards(AuthGuard('jwt'),PermisosGuard)
@@ -28,7 +28,7 @@ export class PermisosController {
         return await this.permisosService.getPermisosCategorized();
     }
 
-    // ASIGNAR UN PERMISO A UN ROL
+    // ASIGN PERMISO TO A ROLE
     @Post('/asign/:permisoId/:rolId/:valor')
     @UseGuards(AuthGuard('jwt'),RolesGuard)
     @Roles("Administrador")
