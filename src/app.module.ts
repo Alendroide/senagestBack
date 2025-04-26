@@ -6,9 +6,21 @@ import { UsuariosModule } from './usuarios/usuarios.module';
 import { ModulosModule } from './modulos/modulos.module';
 import { PermisosModule } from './permisos/permisos.module';
 import { ProgramasModule } from './programas/programas.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
-  imports: [AuthModule, UsuariosModule, ModulosModule, PermisosModule, ProgramasModule],
+  imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname,'..','uploads'),
+      serveRoot: '/uploads',
+    }),
+    AuthModule,
+    UsuariosModule,
+    ModulosModule,
+    PermisosModule,
+    ProgramasModule
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
