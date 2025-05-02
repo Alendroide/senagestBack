@@ -52,14 +52,35 @@ export class PermisosService {
     }
 
     async asignPermiso (permisoId : number, rolId : number, valor : boolean) {
-        const newAsign = await this.prismaService.rolPermiso.create({
-            data : {
-                permisoId,
+
+        const [existingPermiso] = await this.prismaService.rolPermiso.findMany({
+            where : {
                 rolId,
-                valor
+                permisoId
             }
-        });
-        return { message : "Permiso asigned successfully", newAsign};
+        })
+
+        if(!existingPermiso){
+            const newAsign = await this.prismaService.rolPermiso.create({
+                data : {
+                    permisoId,
+                    rolId,
+                    valor
+                }
+            });
+            return { message : "Permiso asigned successfully", value : newAsign};
+        }
+        else{
+            const updatedAsign = await this.prismaService.rolPermiso.updateMany({
+                data : {valor},
+                where : {
+                    rolId,
+                    permisoId
+                }
+            })
+            return { message : "Permiso asigned successfully", value : updatedAsign};
+        }
+
     }
 
     async myPermisos (usuarioId : number) {
