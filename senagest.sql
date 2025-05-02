@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.30, for Win64 (x86_64)
 --
--- Host: localhost    Database: formativa
+-- Host: localhost    Database: senagest
 -- ------------------------------------------------------
 -- Server version	8.0.30
 
@@ -84,7 +84,7 @@ CREATE TABLE `permiso` (
   PRIMARY KEY (`id`),
   KEY `Permiso_moduloId_fkey` (`moduloId`),
   CONSTRAINT `Permiso_moduloId_fkey` FOREIGN KEY (`moduloId`) REFERENCES `modulo` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -93,7 +93,7 @@ CREATE TABLE `permiso` (
 
 LOCK TABLES `permiso` WRITE;
 /*!40000 ALTER TABLE `permiso` DISABLE KEYS */;
-INSERT INTO `permiso` VALUES (1,'Crear Módulos','Permite la creación de módulos nuevos en el sistema','write',1),(2,'Leer Módulos','Permite obtener los módulos existentes en el sistema','read',1),(3,'Crear Permisos','Permite crear permisos a los módulos','write',2),(4,'Leer Permisos','Permite obtener todos los permisos existentes','read',2);
+INSERT INTO `permiso` VALUES (1,'Crear Módulos','Permite la creación de módulos nuevos en el sistema','write',1),(2,'Leer Módulos','Permite obtener los módulos existentes en el sistema','read',1),(3,'Crear Permisos','Permite crear permisos a los módulos','write',2),(4,'Leer Permisos','Permite obtener todos los permisos existentes','read',2),(5,'Asignar Permiso','Permite asignar un permiso a un rol','write',2);
 /*!40000 ALTER TABLE `permiso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -171,7 +171,7 @@ CREATE TABLE `rolpermiso` (
 
 LOCK TABLES `rolpermiso` WRITE;
 /*!40000 ALTER TABLE `rolpermiso` DISABLE KEYS */;
-INSERT INTO `rolpermiso` VALUES (1,1,1),(1,2,0),(2,1,1),(2,2,1),(3,1,1),(4,1,1),(4,2,1);
+INSERT INTO `rolpermiso` VALUES (1,1,1),(1,2,0),(2,1,1),(2,2,1),(3,1,1),(4,1,1),(4,2,1),(5,1,1);
 /*!40000 ALTER TABLE `rolpermiso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -190,7 +190,7 @@ CREATE TABLE `rutafront` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `RutaFront_permisoId_key` (`permisoId`),
   CONSTRAINT `RutaFront_permisoId_fkey` FOREIGN KEY (`permisoId`) REFERENCES `permiso` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -199,7 +199,7 @@ CREATE TABLE `rutafront` (
 
 LOCK TABLES `rutafront` WRITE;
 /*!40000 ALTER TABLE `rutafront` DISABLE KEYS */;
-INSERT INTO `rutafront` VALUES (1,'create',1,'Crear módulos'),(2,'list',2,'Ver módulos'),(3,'create',3,'Crear permisos'),(4,'list',4,'Ver permisos');
+INSERT INTO `rutafront` VALUES (1,'create',1,'Crear módulos'),(2,'list',2,'Ver módulos'),(3,'create',3,'Crear permisos'),(4,'list',4,'Ver permisos'),(5,'asign',5,'Asignar permiso');
 /*!40000 ALTER TABLE `rutafront` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -222,7 +222,7 @@ CREATE TABLE `usuario` (
   `fichaId` int DEFAULT NULL,
   `rolId` int DEFAULT NULL,
   `fechaNacimiento` datetime(3) NOT NULL,
-  `img` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'defaultpfp.png',
+  `img` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'defaultpfp.png',
   PRIMARY KEY (`id`),
   UNIQUE KEY `Usuario_identificacion_key` (`identificacion`),
   UNIQUE KEY `Usuario_correo_key` (`correo`),
@@ -239,7 +239,7 @@ CREATE TABLE `usuario` (
 
 LOCK TABLES `usuario` WRITE;
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
-INSERT INTO `usuario` VALUES (1,1079534351,'Luis','Alejandro','Bonilla','Echeverri','pepe@gmail.com','$2b$10$g5nHMpmQXtMlFwG3paml3.03kOXSgnSwqH/gG63V3qIMQFyVcP4E6',2846103,1,'2005-02-06 17:00:00.000','Ipsam quis illo omnis.'),(2,1070598678,'Estefany','Daniela','Parada','Escalante','kesito@gmail.com','$2b$10$Et6e/Saehq06WLeS8THpEujK0etzych9DFBy29Qib8eZnUOd1mzqy',2900810,2,'2007-11-11 23:00:00.000','Voluptatem eius ullam rerum commodi sed nesciunt tempora provident excepturi.');
+INSERT INTO `usuario` VALUES (1,1079534351,'Luis','Alejandro','Bonilla','Echeverri','pepe@gmail.com','$2b$10$g5nHMpmQXtMlFwG3paml3.03kOXSgnSwqH/gG63V3qIMQFyVcP4E6',2846103,1,'2005-02-06 17:00:00.000','defaultpfp.png'),(2,1070598678,'Estefany','Daniela','Parada','Escalante','kesito@gmail.com','$2b$10$Et6e/Saehq06WLeS8THpEujK0etzych9DFBy29Qib8eZnUOd1mzqy',2900810,2,'2007-11-11 23:00:00.000','defaultpfp.png');
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -252,4 +252,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-26 14:32:37
+-- Dump completed on 2025-05-02 10:40:35

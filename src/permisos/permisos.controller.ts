@@ -30,8 +30,8 @@ export class PermisosController {
 
     // ASIGN PERMISO TO A ROLE
     @Post('/asign/:permisoId/:rolId/:valor')
-    @UseGuards(AuthGuard('jwt'),RolesGuard)
-    @Roles("Administrador")
+    @Permiso(5)
+    @UseGuards(AuthGuard('jwt'),PermisosGuard)
     async asignPermiso (@Param('permisoId',ParseIntPipe) permisoId : number, @Param('rolId',ParseIntPipe) rolId : number , @Param('valor',ParseBoolPipe) valor : boolean ) {
         return await this.permisosService.asignPermiso(permisoId,rolId,valor);
     }
