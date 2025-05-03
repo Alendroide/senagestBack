@@ -36,6 +36,22 @@ export class PermisosController {
         return await this.permisosService.asignPermiso(permisoId,rolId,valor);
     }
 
+    // GET PERMISOS BY ROLE
+    @Get('/role/:rolId')
+    @Permiso(5)
+    @UseGuards(AuthGuard('jwt'),PermisosGuard)
+    async getRolePermisos (@Param('rolId',ParseIntPipe) rolId : number ) {
+        return await this.permisosService.getRolePermisos(rolId);
+    }
+
+    // GET ALL ROLES
+    @Get('/roles')
+    @Permiso(5)
+    @UseGuards(AuthGuard('jwt'),PermisosGuard)
+    async getRoles () {
+        return await this.permisosService.getRoles();
+    }
+
     @Get('/modulo/:moduloId')
     @UseGuards(AuthGuard('jwt'),RolesGuard)
     @Roles("Administrador")

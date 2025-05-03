@@ -8,6 +8,7 @@ import { PermisosModule } from './permisos/permisos.module';
 import { ProgramasModule } from './programas/programas.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { RolesModule } from './roles/roles.module';
 
 @Module({
   imports: [
@@ -19,7 +20,8 @@ import { join } from 'path';
     UsuariosModule,
     ModulosModule,
     PermisosModule,
-    ProgramasModule
+    ProgramasModule,
+    RolesModule
   ],
   controllers: [AppController],
   providers: [AppService],
