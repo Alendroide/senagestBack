@@ -81,6 +81,7 @@ export class AuthService {
                     },
                   },
                 },
+                valor : true
               },
             },
           },
