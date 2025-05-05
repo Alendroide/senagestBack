@@ -55,7 +55,7 @@ CREATE TABLE `modulo` (
   `icono` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Book',
   PRIMARY KEY (`id`),
   UNIQUE KEY `Modulo_nombre_key` (`nombre`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -64,7 +64,7 @@ CREATE TABLE `modulo` (
 
 LOCK TABLES `modulo` WRITE;
 /*!40000 ALTER TABLE `modulo` DISABLE KEYS */;
-INSERT INTO `modulo` VALUES (1,'Modulos','Administración global de módulos','Server'),(2,'Permisos','Permite administrar y asignar permisos','Ban'),(3,'Roles','Modulo de creación y administración de roles','User');
+INSERT INTO `modulo` VALUES (1,'Modulos','Administración global de módulos','Server'),(2,'Permisos','Permite administrar y asignar permisos','Ban'),(3,'Roles','Modulo de creación y administración de roles','GraduationCap'),(6,'Usuarios','Permite asignación de roles y administración de usuarios en general','UsersRound');
 /*!40000 ALTER TABLE `modulo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -84,7 +84,7 @@ CREATE TABLE `permiso` (
   PRIMARY KEY (`id`),
   KEY `Permiso_moduloId_fkey` (`moduloId`),
   CONSTRAINT `Permiso_moduloId_fkey` FOREIGN KEY (`moduloId`) REFERENCES `modulo` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -93,7 +93,7 @@ CREATE TABLE `permiso` (
 
 LOCK TABLES `permiso` WRITE;
 /*!40000 ALTER TABLE `permiso` DISABLE KEYS */;
-INSERT INTO `permiso` VALUES (1,'Crear Módulos','Permite la creación de módulos nuevos en el sistema','write',1),(2,'Leer Módulos','Permite obtener los módulos existentes en el sistema','read',1),(3,'Crear Permisos','Permite crear permisos a los módulos','write',2),(4,'Leer Permisos','Permite obtener todos los permisos existentes','read',2),(5,'Asignar Permiso','Permite asignar un permiso a un rol','write',2),(6,'Crear Rol','Permite crear nuevos roles en el sistema','write',3),(7,'Leer Roles','Permite obtener todos los roles del sistema','read',3);
+INSERT INTO `permiso` VALUES (1,'Crear Módulos','Permite la creación de módulos nuevos en el sistema','write',1),(2,'Leer Módulos','Permite obtener los módulos existentes en el sistema','read',1),(3,'Crear Permisos','Permite crear permisos a los módulos','write',2),(4,'Leer Permisos','Permite obtener todos los permisos existentes','read',2),(5,'Asignar Permiso','Permite asignar un permiso a un rol','write',2),(6,'Crear Rol','Permite crear nuevos roles en el sistema','write',3),(7,'Leer Roles','Permite obtener todos los roles del sistema','read',3),(8,'Crear Usuario','Creación de nuevos usuarios','write',6),(9,'Leer Usuarios','Permite enlistar a cada usuario del sistema categorizado en roles','read',6);
 /*!40000 ALTER TABLE `permiso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -133,9 +133,9 @@ CREATE TABLE `rol` (
   `id` int NOT NULL AUTO_INCREMENT,
   `nombre` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `descripcion` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `icono` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'User',
+  `icono` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'User',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -144,7 +144,7 @@ CREATE TABLE `rol` (
 
 LOCK TABLES `rol` WRITE;
 /*!40000 ALTER TABLE `rol` DISABLE KEYS */;
-INSERT INTO `rol` VALUES (1,'Administrador','Acceso total al sistema','User'),(2,'Aprendiz','Estudiante del CGDSS','User');
+INSERT INTO `rol` VALUES (1,'Administrador','Acceso total al sistema','ShieldUser'),(2,'Aprendiz','Estudiante del CGDSS','User'),(13,'Instructor','Encargado de guiar los procesos formativos de los aprendices','Book'),(14,'Coordinador','Responsable de coordinar las actividades académicas y administrativas','Home'),(15,'Bienestar','Gestiona programas de apoyo y bienestar para aprendices y funcionarios','ShieldUser'),(16,'Gestor TIC','Administra los sistemas tecnológicos del centro de formación','Server'),(17,'Planeación','Encargado de la planificación y evaluación institucional','AppWindow'),(18,'Gestor Ambiental','Lidera estrategias de sostenibilidad y medio ambiente','Atom'),(19,'Apoyo Admin','Brinda soporte en procesos administrativos','AlignEndHorizontal'),(20,'Gestor Emprende','Fomenta la creación de ideas de negocio y proyectos productivos','BadgeDollarSign'),(21,'SST','Promueve la seguridad y bienestar laboral en el centro','Activity'),(22,'Control Acceso','Supervisa el ingreso y la seguridad en las instalaciones','Ban');
 /*!40000 ALTER TABLE `rol` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -172,7 +172,7 @@ CREATE TABLE `rolpermiso` (
 
 LOCK TABLES `rolpermiso` WRITE;
 /*!40000 ALTER TABLE `rolpermiso` DISABLE KEYS */;
-INSERT INTO `rolpermiso` VALUES (1,1,1),(1,2,0),(2,1,1),(2,2,1),(3,1,1),(4,1,1),(4,2,1),(5,1,1);
+INSERT INTO `rolpermiso` VALUES (1,1,1),(1,2,0),(2,1,1),(2,2,0),(3,1,1),(4,1,1),(4,2,1),(5,1,1),(6,1,1),(7,1,1),(8,1,1),(9,1,1);
 /*!40000 ALTER TABLE `rolpermiso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -191,7 +191,7 @@ CREATE TABLE `rutafront` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `RutaFront_permisoId_key` (`permisoId`),
   CONSTRAINT `RutaFront_permisoId_fkey` FOREIGN KEY (`permisoId`) REFERENCES `permiso` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -200,7 +200,7 @@ CREATE TABLE `rutafront` (
 
 LOCK TABLES `rutafront` WRITE;
 /*!40000 ALTER TABLE `rutafront` DISABLE KEYS */;
-INSERT INTO `rutafront` VALUES (1,'create',1,'Crear módulos'),(2,'list',2,'Ver módulos'),(3,'create',3,'Crear permisos'),(4,'list',4,'Ver permisos'),(5,'asign',5,'Asignar permiso'),(6,'create',6,'Crear rol'),(7,'list',7,'Ver roles');
+INSERT INTO `rutafront` VALUES (1,'create',1,'Crear módulos'),(2,'list',2,'Ver módulos'),(3,'create',3,'Crear permisos'),(4,'list',4,'Ver permisos'),(5,'asign',5,'Asignar permiso'),(6,'create',6,'Crear rol'),(7,'list',7,'Ver roles'),(8,'create',8,'Crear usuario'),(9,'list',9,'Ver usuarios');
 /*!40000 ALTER TABLE `rutafront` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -253,4 +253,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-05-03 15:49:56
+-- Dump completed on 2025-05-05  8:27:27
