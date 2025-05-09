@@ -8,6 +8,7 @@ export class RolesService {
 
   async createRole(data: CreateRolDto) {
       const newRole = await this.prismaService.rol.create({ data });
+      return newRole
   }
 
   async getRoles() {

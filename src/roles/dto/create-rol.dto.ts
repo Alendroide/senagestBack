@@ -13,8 +13,7 @@ export class CreateRolDto {
     @MaxLength(255)
     descripcion : string;
 
-    @IsOptional()
     @IsString()
     @IsNotEmpty()
-    icon : string;
+    icono : string;
 }
