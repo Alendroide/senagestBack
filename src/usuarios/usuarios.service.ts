@@ -19,11 +19,15 @@ export class UsuariosService {
             skip: (page-1)*40
         });
 
+        const userCount = await this.prismaService.usuario.count();
+
+        const pagesCount = Math.floor(userCount / 40) + 1;
+
         const processedUsers = users.map((user) => ({
             ...user,
             identificacion : `${user.identificacion}`
         }))
 
-        return processedUsers;
+        return {users: processedUsers, pages: pagesCount};
     }
 }
