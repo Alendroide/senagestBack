@@ -13,7 +13,6 @@ export class CreateUsuarioDto {
     primerNombre: string;
 
     @IsString()
-    @IsNotEmpty()
     @IsOptional()
     segundoNombre?: string;
 
@@ -22,7 +21,6 @@ export class CreateUsuarioDto {
     primerApellido: string;
 
     @IsString()
-    @IsNotEmpty()
     @IsOptional()
     segundoApellido?: string;
 
