@@ -46,6 +46,5 @@ export class CreateUsuarioDto {
     fichaId?: number;
 
     @IsOptional()
-    @IsString()
-    img?: string;
+    img?: any;
 }
