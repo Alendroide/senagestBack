@@ -1,7 +1,6 @@
 import * as bcrypt from 'bcrypt';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './types/jwtPayload';
@@ -13,55 +12,8 @@ export class AuthService {
     private jwtService: JwtService,
   ) { }
 
-  async hashPassword(password: string): Promise<string> {
-    const salt = await bcrypt.genSalt(10);
-    return bcrypt.hash(password, salt);
-  }
-
   async comparePasswords(password: string, hash: string): Promise<boolean> {
     return bcrypt.compare(password, hash);
-  }
-
-  async register(data: CreateUsuarioDto, file: Express.Multer.File | undefined): Promise<any> {
-    // Validaciones
-    const ficha = await this.prismaService.ficha.findUnique({
-      where: { codigo: data.fichaId },
-    });
-
-    if (!ficha)
-      throw new HttpException(
-        { status: 404, message: 'Ficha not found.' },
-        HttpStatus.NOT_FOUND,
-      );
-
-    // Password hashing
-    const hash = await this.hashPassword(data.contrasena);
-
-    // Crear en la base de datos
-    await this.prismaService.usuario.create({
-      data: { ...data, contrasena: hash, img: file ? file.filename : undefined },
-    });
-
-    const newUser = await this.prismaService.usuario.findUnique({
-      where: {
-        identificacion: data.identificacion
-      },
-      select: {
-        id: true,
-        identificacion: true,
-        primerNombre: true,
-        primerApellido: true,
-        segundoNombre: true,
-        segundoApellido: true,
-        correo: true,
-        fichaId: true,
-        rolId: true,
-        fechaNacimiento: true,
-        img: true
-      }
-    });
-
-    return { status: 201, message: 'User registered successfully.', data: newUser };
   }
 
   async login(data: LoginDto): Promise<any> {
