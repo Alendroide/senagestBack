@@ -20,15 +20,6 @@ export class CreatePermisoDto {
 
     @IsNotEmpty()
     @IsNumber()
-    moduloId : number
+    rutaId : number
 
-    @IsNotEmpty()
-    @IsString()
-    @MinLength(4)
-    rutaRuta : string
-
-    @IsNotEmpty()
-    @IsString()
-    @MinLength(4)
-    rutaNombre : string
 }

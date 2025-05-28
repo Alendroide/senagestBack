@@ -1,14 +1,18 @@
-export type permiso = {
-    rutafront : {
-        ruta : string,
-        nombre : string
-    }
+export type Permiso = {
+    nombre: string;
+    tipo: string;
 }
 
-export type Module = {
+export type RutaFront = {
+    nombre: string;
+    ruta: string;
+    permisos: Permiso[];
+}
+
+export type Modulo = {
     nombre : string;
     icono : string;
-    permisos : permiso[];
+    rutas: RutaFront[]
 }
 
 export type JwtPayload = {
@@ -18,5 +22,5 @@ export type JwtPayload = {
     img : string;
     rol : number | undefined;
     nombre : string;
-    modulos : Module[]
+    modulos : Modulo[]
 }

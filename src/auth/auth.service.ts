@@ -11,7 +11,7 @@ export class AuthService {
   constructor(
     private prismaService: PrismaService,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   async hashPassword(password: string): Promise<string> {
     const salt = await bcrypt.genSalt(10);
@@ -42,101 +42,131 @@ export class AuthService {
       data: { ...data, contrasena: hash, img: file ? file.filename : undefined },
     });
 
-    return { message: 'User registered successfully.' };
+    const newUser = await this.prismaService.usuario.findUnique({
+      where: {
+        identificacion: data.identificacion
+      },
+      select: {
+        id: true,
+        identificacion: true,
+        primerNombre: true,
+        primerApellido: true,
+        segundoNombre: true,
+        segundoApellido: true,
+        correo: true,
+        fichaId: true,
+        rolId: true,
+        fechaNacimiento: true,
+        img: true
+      }
+    });
+
+    return { status: 201, message: 'User registered successfully.', data: newUser };
   }
 
   async login(data: LoginDto): Promise<any> {
     // Buscar el usuario
     const user = await this.prismaService.usuario.findUnique({
       where: { correo: data.correo },
-      include: {
-        rol: true,
+      select: {
+        id: true,
+        identificacion: true,
+        correo: true,
+        img: true,
+        rolId: true,
+        primerNombre: true,
+        primerApellido: true,
+        contrasena: true
       },
     });
 
     // Validaciones
     if (!user)
       throw new HttpException(
-        { message: 'User not found.' },
+        { status: 404, message: 'User not found.' },
         HttpStatus.NOT_FOUND,
       );
 
     // Comparar contraseñas
     if (!(await this.comparePasswords(data.contrasena, user.contrasena)))
       throw new HttpException(
-        { message: 'Wrong password. Please try again.' },
+        { status: 401, message: 'Wrong password. Please try again.' },
         HttpStatus.UNAUTHORIZED,
       );
 
-    const modules = await this.prismaService.modulo.findMany({
-      where: {
-        permisos: {
-          some: {
-            roles: {
-              some: {
-                rol: {
-                  usuarios: {
-                    some: {
-                      id: user.id,
-                    },
-                  },
-                },
-                valor : true
-              },
-            },
-          },
-        },
-      },
-      select: {
-        nombre: true,
-        icono: true,
-        permisos: {
-          where: {
-            roles: {
-              some: {
-                valor : true,
-                rol: {
-                  usuarios: {
-                    some: {
-                      id: user.id,
-                    },
-                  },
-                },
-              },
-            },
-          },
-          select: {
-            rutafront: {
-              select: {
-                ruta: true,
-                nombre : true
-              },
-            },
-          },
-        },
-      },
-    });
-
-    const fixedModules = modules.map(m => ({
-        nombre: m.nombre,
-        icono: m.icono,
-        permisos: m.permisos.map(p => ({
-          rutafront: p.rutafront[0], // solo toma la primera ruta
-        }))
-    }));
-
-    // Generar JWT
-    const payload: JwtPayload = {
+    let payload: JwtPayload = {
       sub: user.id,
-      identificacion: user.identificacion.toString(),
+      identificacion: `${user.identificacion}`,
       correo: user.correo,
-      img : user.img,
-      rol: user.rol?.id,
+      img: user.img,
+      rol: user.rolId ?? undefined,
       nombre: `${user.primerNombre} ${user.primerApellido}`,
-      modulos: fixedModules,
-    };
+      modulos: []
+    }
+
+    if (user.rolId) {
+      const modulos = await this.prismaService.modulo.findMany({
+        where: {
+          rutas: {
+            some: {
+              permisos: {
+                some: {
+                  roles: {
+                    some: {
+                      rolId: user.rolId,
+                      valor: true, // para que solo permisos activos
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        select: {
+          nombre: true,
+          icono: true,
+          rutas: {
+            where: {
+              permisos: {
+                some: {
+                  roles: {
+                    some: {
+                      rolId: user.rolId,
+                      valor: true,
+                    }
+                  }
+                }
+              }
+            },
+            select: {
+              nombre: true,
+              ruta: true,
+              permisos: {
+                where: {
+                  roles: {
+                    some: {
+                      rolId: user.rolId,
+                      valor: true,
+                    }
+                  }
+                },
+                select: {
+                  nombre: true,
+                  tipo: true
+                }
+              }
+            }
+          }
+        }
+      });
+
+      payload = {
+        ...payload,
+        modulos
+      }
+    }
 
     // Retornar JWT
-    return { access_token: this.jwtService.sign(payload) };
+    return { status: 200, message: "Login successful", access_token: this.jwtService.sign(payload) };
   }
 }

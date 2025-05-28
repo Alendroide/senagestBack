@@ -12,42 +12,34 @@ export class PermisosService {
         id: true,
         nombre: true,
         icono: true,
-        permisos: true,
+        rutas: {
+          select: {
+            permisos: true
+          }
+        }
       },
     });
-    return permisos;
+    return { status: 200, message: "Permisos fetched successfully", data: permisos};
   }
 
   async getPermisosByModulo(moduloId: number) {
     const permisos = await this.prismaService.permiso.findMany({
       where: {
-        moduloId,
+        ruta: {
+          moduloId
+        },
       },
     });
-    return permisos;
+    return { status: 200, message: 'Permisos fetched successfully', data: permisos};
   }
 
   async createPermiso(data: CreatePermisoDto) {
-    const permisoInfo = {
-      nombre: data.nombre,
-      descripcion: data.descripcion,
-      tipo: data.tipo,
-      moduloId: data.moduloId,
-    };
 
     const permiso = await this.prismaService.permiso.create({
-      data: permisoInfo,
+      data
     });
 
-    await this.prismaService.rutaFront.create({
-      data: {
-        nombre: data.rutaNombre,
-        ruta: data.rutaRuta,
-        permisoId: permiso.id,
-      },
-    });
-
-    return { message: 'Permiso created successfully', permiso };
+    return { status: 200, message: 'Permiso created successfully', data: permiso };
   }
 
   async asignPermiso(permisoId: number, rolId: number, valor: boolean) {
@@ -66,7 +58,7 @@ export class PermisosService {
           valor,
         },
       });
-      return { message: 'Permiso asigned successfully', value: newAsign };
+      return { status: 201, message: 'Permiso asigned successfully', data: newAsign };
     } else {
       const updatedAsign = await this.prismaService.rolPermiso.updateMany({
         data: { valor },
@@ -75,113 +67,23 @@ export class PermisosService {
           permisoId,
         },
       });
-      return { message: 'Permiso asigned successfully', value: updatedAsign };
+      return { status: 200, message: 'Permiso asigned successfully', data: updatedAsign };
     }
   }
 
   async getRolePermisos(rolId: number) {
-    const modulosConPermisos = await this.prismaService.modulo.findMany({
-      include: {
-        permisos: {
-          include: {
-            roles: {
-              where: {
-                rolId,
-              },
-              select: {
-                valor: true,
-              },
-            },
-          },
-        },
-      },
-    });
-
-    const resultado = modulosConPermisos.map((modulo) => ({
-      id: modulo.id,
-      nombre: modulo.nombre,
-      descripcion: modulo.descripcion,
-      icono: modulo.icono,
-      permisos: modulo.permisos.map((permiso) => ({
-        id: permiso.id,
-        nombre: permiso.nombre,
-        descripcion: permiso.descripcion,
-        tipo: permiso.tipo,
-        checked: permiso.roles.length > 0 ? permiso.roles[0].valor : false,
-      })),
-    }));
-
-    return resultado;
+    return "In process"
   }
 
   async getRoles(){
-    return await this.prismaService.rol.findMany();
+    return "In process"
   }
 
   async myPermisos(usuarioId: number) {
-    const myPermisos = await this.prismaService.rolPermiso.findMany({
-      where: {
-        rol: {
-          usuarios: {
-            some: {
-              id: usuarioId,
-            },
-          },
-        },
-      },
-      select: {
-        permiso: {
-          select: {
-            nombre: true,
-            modulo: {
-              select: {
-                nombre: true,
-              },
-            },
-          },
-        },
-      },
-    });
-    const permisosName = myPermisos.map((pem) => ({
-      nombre: pem.permiso.nombre,
-      modulo: pem.permiso.modulo.nombre,
-    }));
-    return permisosName;
+    return "In process"
   }
 
   async myPermisosByModulo(usuarioId: number, moduloId: number) {
-    const myPermisos = await this.prismaService.rolPermiso.findMany({
-      where: {
-        rol: {
-          usuarios: {
-            some: {
-              id: usuarioId,
-            },
-          },
-        },
-        permiso: {
-          modulo: {
-            id: moduloId,
-          },
-        },
-      },
-      select: {
-        permiso: {
-          select: {
-            nombre: true,
-            modulo: {
-              select: {
-                nombre: true,
-              },
-            },
-          },
-        },
-      },
-    });
-    const permisosName = myPermisos.map((pem) => ({
-      nombre: pem.permiso.nombre,
-      modulo: pem.permiso.modulo.nombre,
-    }));
-    return permisosName;
+    return "In process"
   }
 }

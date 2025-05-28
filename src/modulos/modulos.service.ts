@@ -8,19 +8,12 @@ export class ModulosService {
     constructor(private prismaService : PrismaService) {}
 
     async getModulos() : Promise<any> {
-        return await this.prismaService.modulo.findMany();
+        const modulos = await this.prismaService.modulo.findMany();
+        return { status: 200, message: "Modulos fetched successfully", data: modulos};
     }
 
-    // async accessModulo(nombre : string) : Promise<any> {
-    //     return await this.prismaService.modulo.findUnique({
-    //         where : {
-    //             nombre
-    //         }
-    //     })
-    // }
-
     async createModulo(data : CreateModuloDto) : Promise<any> {
-        await this.prismaService.modulo.create({ data });
-        return { message : "Modulo created successfully." };
+        const newModulo = await this.prismaService.modulo.create({ data });
+        return { status: 201, message : "Modulo created successfully.", data: newModulo };
     }
 }

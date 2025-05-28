@@ -33,6 +33,6 @@ export class UsuariosService {
             identificacion : `${user.identificacion}`
         }))
 
-        return {users: processedUsers, pages: Math.floor(pagesCount)};
+        return {status: 200, message: "Users fetched successfully", data: processedUsers, currentPage: page, totalPages: Math.floor(pagesCount)};
     }
 }

@@ -52,25 +52,4 @@ export class PermisosController {
         return await this.permisosService.getRoles();
     }
 
-    @Get('/modulo/:moduloId')
-    @UseGuards(AuthGuard('jwt'),RolesGuard)
-    @Roles("Administrador")
-    async getPermisosByModulo (@Param('moduloId',ParseIntPipe) moduloId : number ) {
-        return await this.permisosService.getPermisosByModulo(moduloId);
-    }
-
-    @Get('/me')
-    @UseGuards(AuthGuard('jwt'))
-    async myPermisos(@Request() req : any){
-        const usuarioId = req.user.sub;
-        return await this.permisosService.myPermisos(usuarioId);
-    }
-
-    @Get('/me/:moduloId')
-    @UseGuards(AuthGuard('jwt'))
-    async myPermisosByModulo (@Request() req : any, @Param('moduloId',ParseIntPipe) moduloId) {
-        const usuarioId = req.user.sub;
-        return await this.permisosService.myPermisosByModulo(usuarioId,moduloId);
-    }
-
 }
