@@ -15,8 +15,8 @@ export class ModulosController {
     @Post()
     @Permiso(1)
     @UseGuards(PermisosGuard)
-    async createModulo(@Body() body : CreateModuloDto) {
-        return await this.modulosService.createModulo(body);
+    async createModulo(@Body() data : CreateModuloDto) {
+        return await this.modulosService.createModulo(data);
     }
 
     @Get()
@@ -29,14 +29,14 @@ export class ModulosController {
     @Patch('update/:id')
     @Permiso(3)
     @UseGuards(PermisosGuard)
-    async updateModulo(@Param('id',ParseIntPipe) id: number, @Body() body: UpdateModuloDto) {
-        return "In process"
+    async updateModulo(@Param('id',ParseIntPipe) id: number, @Body() data: UpdateModuloDto) {
+        return await this.modulosService.updateModulo(id,data);
     }
 
     @Patch('status/:id')
     @Permiso(4)
     @UseGuards(PermisosGuard)
-    async moduloStatus(@Param('id',ParseIntPipe) id: number) {
-        return "In process"
+    async updateStatus(@Param('id',ParseIntPipe) id: number) {
+        return await this.modulosService.updateStatus(id);
     }
 }
