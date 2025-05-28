@@ -30,7 +30,7 @@ export class AuthService {
 
     if (!ficha)
       throw new HttpException(
-        { message: 'Ficha not found.' },
+        { status: 404, message: 'Ficha not found.' },
         HttpStatus.NOT_FOUND,
       );
 
