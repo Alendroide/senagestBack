@@ -1,33 +1,42 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
 import { ModulosService } from './modulos.service';
 import { CreateModuloDto } from './dto/create-modulo.dto';
-import { RolesGuard } from 'src/auth/guards/roles.guard';
-import { Roles } from 'src/auth/decorators/roles.decorator';
 import { AuthGuard } from '@nestjs/passport';
 import { Permiso } from 'src/auth/decorators/permisos.decorator';
 import { PermisosGuard } from 'src/auth/guards/permisos.guard';
+import { UpdateModuloDto } from './dto/update-modulo.dto';
 
+@UseGuards(AuthGuard('jwt'))
 @Controller('modulos')
 export class ModulosController {
     constructor(private modulosService : ModulosService) {}
 
-    @Get()
-    @Permiso(2)
-    @UseGuards(AuthGuard('jwt'),PermisosGuard)
-    async getModulos() : Promise<any> {
-        return await this.modulosService.getModulos();
-    }
-
-    // @Get('/:moduloName')
-    // @UseGuards(AuthGuard('jwt'))
-    // async accessModulo(@Param('moduloName') moduloName : string) : Promise<any> {
-    //     return await this.modulosService.accessModulo(moduloName);
-    // }
 
     @Post()
     @Permiso(1)
-    @UseGuards(AuthGuard('jwt'),PermisosGuard)
-    async createModulo(@Body() body : CreateModuloDto) : Promise<any> {
+    @UseGuards(PermisosGuard)
+    async createModulo(@Body() body : CreateModuloDto) {
         return await this.modulosService.createModulo(body);
+    }
+
+    @Get()
+    @Permiso(2)
+    @UseGuards(PermisosGuard)
+    async getModulos() {
+        return await this.modulosService.getModulos();
+    }
+
+    @Patch('update/:id')
+    @Permiso(3)
+    @UseGuards(PermisosGuard)
+    async updateModulo(@Param('id',ParseIntPipe) id: number, @Body() body: UpdateModuloDto) {
+        return "In process"
+    }
+
+    @Patch('status/:id')
+    @Permiso(4)
+    @UseGuards(PermisosGuard)
+    async moduloStatus(@Param('id',ParseIntPipe) id: number) {
+        return "In process"
     }
 }
