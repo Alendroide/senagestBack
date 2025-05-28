@@ -98,7 +98,8 @@ export class PermisosService {
   }
 
   async getRoles(){
-    return "In process"
+    const roles = await this.prismaService.rol.findMany();
+    return { status: 200, message: "Roles fetched successfully", data: roles};
   }
 
 }
