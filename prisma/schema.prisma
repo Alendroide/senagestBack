@@ -66,6 +66,7 @@ enum tipoPermiso {
   read
   write
   update
+  delete
 }
 
 model Permiso {

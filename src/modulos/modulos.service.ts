@@ -19,7 +19,13 @@ export class ModulosService {
     }
 
     async updateModulo(id: number, data: UpdateModuloDto) {
-        return "In process";
+        const updatedModulo = await this.prismaService.modulo.update({
+            where: {
+                id
+            },
+            data
+        })
+        return { status: 200, message: "Modulo updated succesfully", data: updatedModulo};
     }
 
     async updateStatus(id: number) {
