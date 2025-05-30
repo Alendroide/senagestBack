@@ -103,8 +103,9 @@ export class AuthService {
                   }
                 },
                 select: {
+                  id: true,
                   nombre: true,
-                  tipo: true
+                  tipo: true,
                 }
               }
             }
