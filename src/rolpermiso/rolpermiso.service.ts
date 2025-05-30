@@ -42,19 +42,23 @@ export class RolpermisoService {
   }
 
   async getRolePermisos(rolId: number) {
-    const rolePermisos = await this.prismaService.permiso.findMany({
-      where: {
-        roles: {
-          some: {
-            AND: {
-              rolId,
-              valor: true
-            }
+    const rolePermisos = await this.prismaService.modulo.findMany({
+      include: {
+        rutas: {
+          include: {
+            permisos: true
           }
         }
       }
-    })
-    return { status: 200, message: "Permisos by rol fetched successfully", data: rolePermisos}
+    });
+
+    const mappedPermisos = rolePermisos.map((module) => ({
+      ...module,
+      permisos: module.rutas.flatMap((ruta) => ruta.permisos),
+      rutas: undefined
+    }))
+
+    return { status: 200, message: "Permisos by rol fetched successfully", data: mappedPermisos}
   }
 
   async getRoles(){
