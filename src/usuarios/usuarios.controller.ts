@@ -8,6 +8,7 @@ import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import * as sharp from 'sharp';
+import { promises as fs } from 'fs';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('usuarios')
@@ -43,6 +44,7 @@ export class UsuariosController {
                 })
                 .jpeg({quality: 70})
                 .toFile(`./uploads/resize-${file.filename}`);
+            await fs.unlink(file.path);
         }
         return await this.usuariosService.createUsuario(body, file);
     }
