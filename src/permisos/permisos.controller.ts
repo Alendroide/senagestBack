@@ -19,12 +19,19 @@ export class PermisosController {
         return await this.permisosService.createPermiso(body);
     }
 
-    @Get(':id')
+    @Get('module/:id')
     @Permiso(6)
     @UseGuards(PermisosGuard)
     async getPermisos ( @Param('id',ParseIntPipe) id: number, @Query("page",ParseIntPipe) pageQuery : number) {
         const page = pageQuery || 1;
         return await this.permisosService.getPermisos (id, page );
+    }
+
+    @Get("modules")
+    @Permiso(6)
+    @UseGuards(PermisosGuard)
+    async getModules () {
+        return await this.permisosService.getModules();
     }
 
     @Patch('update/:id')
