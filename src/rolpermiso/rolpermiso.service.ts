@@ -43,10 +43,19 @@ export class RolpermisoService {
 
   async getRolePermisos(rolId: number) {
     const rolePermisos = await this.prismaService.modulo.findMany({
-      include: {
+      select: {
+        id: true,
+        nombre: true,
+        icono: true,
         rutas: {
           include: {
-            permisos: true
+            permisos: {
+              select: {
+                id: true,
+                nombre: true,
+                tipo: true
+              }
+            }
           }
         }
       }
