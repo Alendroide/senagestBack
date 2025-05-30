@@ -28,7 +28,7 @@ export class UsuariosService {
 
         // Crear en la base de datos
         await this.prismaService.usuario.create({
-            data: { ...data, contrasena: hash, img: file ? file.filename : undefined },
+            data: { ...data, contrasena: hash, img: file ? `resize-${file.filename}` : undefined },
         });
 
         const newUser = await this.prismaService.usuario.findUnique({
@@ -50,7 +50,12 @@ export class UsuariosService {
             }
         });
 
-        return { status: 201, message: 'User registered successfully.', data: newUser };
+        const newUserParsed = {
+            ...newUser,
+            identificacion: `${newUser?.identificacion}`
+        }
+
+        return { status: 201, message: 'User registered successfully.', data: newUserParsed };
     }
 
     async getUsuarios(page: number) {

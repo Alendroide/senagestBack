@@ -7,22 +7,23 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
+import * as sharp from 'sharp';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('usuarios')
 export class UsuariosController {
 
-    constructor(private usuariosService : UsuariosService){}
+    constructor(private usuariosService: UsuariosService) { }
 
     @Get('perfil')
-    getProfile(@Request() req : any) {
+    getProfile(@Request() req: any) {
         return req.user;
     }
 
     @Post()
     @Permiso(14)
     @UseGuards(PermisosGuard)
-    @UseInterceptors(FileInterceptor('img',{
+    @UseInterceptors(FileInterceptor('img', {
         storage: diskStorage({
             destination: './uploads',
             filename: (req, file, callback) => {
@@ -33,14 +34,22 @@ export class UsuariosController {
             }
         })
     }))
-    async createUsuario(@Body() body : CreateUsuarioDto, @UploadedFile() file?: Express.Multer.File ) : Promise<any> {
-        return await this.usuariosService.createUsuario(body,file);
+    async createUsuario(@Body() body: CreateUsuarioDto, @UploadedFile() file?: Express.Multer.File): Promise<any> {
+        if(file){
+            await sharp(file.path)
+                .resize(500, 500, {
+                    fit: 'cover',
+                    withoutEnlargement: false,
+                })
+                .toFile(`./uploads/resize-${file.filename}`);
+        }
+        return await this.usuariosService.createUsuario(body, file);
     }
 
     @Get()
     @Permiso(15)
     @UseGuards(PermisosGuard)
-    async getUsuarios(@Query("page",ParseIntPipe) pageQuery : number | undefined){
+    async getUsuarios(@Query("page", ParseIntPipe) pageQuery: number | undefined) {
         const page = pageQuery ?? 1;
         return await this.usuariosService.getUsuarios(page);
     }
