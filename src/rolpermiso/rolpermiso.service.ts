@@ -4,10 +4,10 @@ import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
 export class RolpermisoService {
 
-    constructor(private prismaService: PrismaService){}
+  constructor(private prismaService: PrismaService) { }
 
-    async asignPermiso(permisoId: number, rolId: number, valor: boolean) {
-    
+  async asignPermiso(permisoId: number, rolId: number, valor: boolean) {
+
     const [existingPermiso] = await this.prismaService.rolPermiso.findMany({
       where: {
         rolId,
@@ -16,7 +16,7 @@ export class RolpermisoService {
     });
 
     if (!existingPermiso) {
-      
+
       const newAsign = await this.prismaService.rolPermiso.create({
         data: {
           permisoId,
@@ -24,11 +24,11 @@ export class RolpermisoService {
           valor,
         },
       });
-      
+
       return { status: 201, message: 'Permiso asigned successfully', data: newAsign };
 
     } else {
-      
+
       const updatedAsign = await this.prismaService.rolPermiso.updateMany({
         data: { valor },
         where: {
@@ -52,17 +52,41 @@ export class RolpermisoService {
       }
     });
 
-    const mappedPermisos = rolePermisos.map((module) => ({
-      ...module,
-      permisos: module.rutas.flatMap((ruta) => ruta.permisos),
-      rutas: undefined
-    }))
+    const rolPermisosAsignados = await this.prismaService.rolPermiso.findMany({
+      where: {
+        rolId: rolId,
+      },
+      select: {
+        permisoId: true,
+        valor: true,
+      },
+    });
 
-    return { status: 200, message: "Permisos by rol fetched successfully", data: mappedPermisos}
+    const permisoMap = new Map(
+      rolPermisosAsignados.map(({ permisoId, valor }) => [permisoId, valor])
+    );
+
+    const mappedPermisos = rolePermisos.map((module) => {
+      const permisos = module.rutas.flatMap((ruta) =>
+        ruta.permisos.map((permiso) => ({
+          ...permiso,
+          checked: permisoMap.get(permiso.id) ?? false,
+        }))
+      );
+
+      return {
+        ...module,
+        permisos,
+        rutas: undefined,
+      };
+    });
+
+
+    return { status: 200, message: "Permisos by rol fetched successfully", data: mappedPermisos }
   }
 
-  async getRoles(){
+  async getRoles() {
     const roles = await this.prismaService.rol.findMany();
-    return { status: 200, message: "Roles fetched successfully", data: roles};
+    return { status: 200, message: "Roles fetched successfully", data: roles };
   }
 }
