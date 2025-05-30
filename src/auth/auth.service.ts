@@ -4,6 +4,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './types/jwtPayload';
+import { Modulo } from './types/Modulo';
 
 @Injectable()
 export class AuthService {
@@ -46,82 +47,74 @@ export class AuthService {
         HttpStatus.UNAUTHORIZED,
       );
 
-    let payload: JwtPayload = {
+    const payload: JwtPayload = {
       sub: user.id,
       identificacion: `${user.identificacion}`,
       correo: user.correo,
       img: user.img,
       rol: user.rolId ?? undefined,
-      nombre: `${user.primerNombre} ${user.primerApellido}`,
-      modulos: []
+      nombre: `${user.primerNombre} ${user.primerApellido}`
     }
 
-    if (user.rolId) {
-      const modulos = await this.prismaService.modulo.findMany({
-        where: {
-          rutas: {
-            some: {
-              permisos: {
-                some: {
-                  roles: {
-                    some: {
-                      rolId: user.rolId,
-                      valor: true, // para que solo permisos activos
-                    }
+    const modulos: Modulo[] | undefined = user.rolId ? await this.prismaService.modulo.findMany({
+      where: {
+        rutas: {
+          some: {
+            permisos: {
+              some: {
+                roles: {
+                  some: {
+                    rolId: user.rolId,
+                    valor: true, // para que solo permisos activos
                   }
-                }
-              }
-            }
-          }
-        },
-        select: {
-          id: true,
-          nombre: true,
-          icono: true,
-          rutas: {
-            where: {
-              permisos: {
-                some: {
-                  roles: {
-                    some: {
-                      rolId: user.rolId,
-                      valor: true,
-                    }
-                  }
-                }
-              }
-            },
-            select: {
-              id: true,
-              nombre: true,
-              ruta: true,
-              permisos: {
-                where: {
-                  roles: {
-                    some: {
-                      rolId: user.rolId,
-                      valor: true,
-                    }
-                  }
-                },
-                select: {
-                  id: true,
-                  nombre: true,
-                  tipo: true,
                 }
               }
             }
           }
         }
-      });
-
-      payload = {
-        ...payload,
-        modulos
+      },
+      select: {
+        id: true,
+        nombre: true,
+        icono: true,
+        rutas: {
+          where: {
+            permisos: {
+              some: {
+                roles: {
+                  some: {
+                    rolId: user.rolId,
+                    valor: true,
+                  }
+                }
+              }
+            }
+          },
+          select: {
+            id: true,
+            nombre: true,
+            ruta: true,
+            permisos: {
+              where: {
+                roles: {
+                  some: {
+                    rolId: user.rolId,
+                    valor: true,
+                  }
+                }
+              },
+              select: {
+                id: true,
+                nombre: true,
+                tipo: true,
+              }
+            }
+          }
+        }
       }
-    }
+    }) : undefined;
 
     // Retornar JWT
-    return { status: 200, message: "Login successful", access_token: this.jwtService.sign(payload) };
+    return { status: 200, message: "Login successful", access_token: this.jwtService.sign(payload), modulos };
   }
 }
