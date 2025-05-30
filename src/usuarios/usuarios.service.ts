@@ -64,12 +64,18 @@ export class UsuariosService {
 
         const users = await this.prismaService.usuario.findMany({
             select: {
+                id: true,
+                img: true,
                 identificacion: true,
                 primerNombre: true,
                 segundoNombre: true,
                 primerApellido: true,
                 segundoApellido: true,
                 correo: true,
+                ficha: true
+            },
+            orderBy: {
+                fichaId: 'asc'
             },
             take: records,
             skip: (page - 1) * records

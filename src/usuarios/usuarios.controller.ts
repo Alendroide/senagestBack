@@ -42,7 +42,7 @@ export class UsuariosController {
                     fit: 'cover',
                     withoutEnlargement: false,
                 })
-                .jpeg({quality: 70})
+                .png({compressionLevel: 9})
                 .toFile(`./uploads/resize-${file.filename}`);
             await fs.unlink(file.path);
         }
