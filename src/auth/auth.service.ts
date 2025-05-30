@@ -92,6 +92,7 @@ export class AuthService {
               }
             },
             select: {
+              id: true,
               nombre: true,
               ruta: true,
               permisos: {
