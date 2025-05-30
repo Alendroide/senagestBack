@@ -26,6 +26,9 @@ export class PermisosService {
         id,
       },
       select: {
+        id: true,
+        icono: true,
+        nombre: true,
         rutas: {
           select: {
             permisos: true,
@@ -41,10 +44,16 @@ export class PermisosService {
     const permisosCount = mappedPermisos.length;
     const paginatedPermisos = mappedPermisos.slice(skip, skip + records);
 
+    const completeInfo = {
+      ...permisos,
+      rutas: undefined,
+      permisos: paginatedPermisos,
+    }
+
     return {
       status: 200,
       message: 'Permisos fetched successfully',
-      data: paginatedPermisos,
+      data: completeInfo,
       currentPage: page,
       totalPages: Math.ceil(permisosCount / records),
     };
