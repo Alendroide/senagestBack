@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ModulosService } from './modulos.service';
 import { CreateModuloDto } from './dto/create-modulo.dto';
 import { AuthGuard } from '@nestjs/passport';
@@ -22,8 +22,9 @@ export class ModulosController {
     @Get()
     @Permiso(2)
     @UseGuards(PermisosGuard)
-    async getModulos() {
-        return await this.modulosService.getModulos();
+    async getModulos(@Query('page',ParseIntPipe) pageQuery: number) {
+        const page = pageQuery ?? 1;
+        return await this.modulosService.getModulos(page);
     }
 
     @Patch('update/:id')

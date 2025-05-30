@@ -12,9 +12,19 @@ export class RolesService {
       return { status: 201, message: "Rol created successfully", data: newRole};
   }
 
-  async getRoles() {
-    const roles = await this.prismaService.rol.findMany();
-    return { status: 200, message: "Roles fetched successfully", data: roles};
+  async getRoles(page: number) {
+    const records = 10;
+
+    const roles = await this.prismaService.rol.findMany({
+      take: records,
+      skip: (page - 1) * records
+    });
+
+    const roleCount = await this.prismaService.rol.count();
+
+    const totalPages = Math.ceil(roleCount / records);
+
+    return { status: 200, message: "Roles fetched successfully", data: roles, currentPage: page, totalPages };
   }
 
   async updateRol(id: number, data: UpdateRolDto){

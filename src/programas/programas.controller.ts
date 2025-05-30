@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, ParseIntPipe, Post, Query, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
@@ -13,8 +13,9 @@ export class ProgramasController {
     @Get()
     @UseGuards(AuthGuard('jwt'),RolesGuard)
     @Roles('Aprendiz')
-    async getProgramas(){
-        return await this.programasService.getProgramas();
+    async getProgramas(@Query("page",ParseIntPipe) pageQuery : number | undefined){
+        const page = pageQuery ?? 1;
+        return await this.programasService.getProgramas(page);
     }
 
     @Post()

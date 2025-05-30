@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query, Request, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, ParseIntPipe, Post, Query, Request, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { UsuariosService } from './usuarios.service';
 import { PermisosGuard } from 'src/auth/guards/permisos.guard';
@@ -40,7 +40,7 @@ export class UsuariosController {
     @Get()
     @Permiso(15)
     @UseGuards(PermisosGuard)
-    async getUsuarios(@Query("page") pageQuery : number | undefined){
+    async getUsuarios(@Query("page",ParseIntPipe) pageQuery : number | undefined){
         const page = pageQuery ?? 1;
         return await this.usuariosService.getUsuarios(page);
     }

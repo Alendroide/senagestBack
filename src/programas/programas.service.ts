@@ -5,15 +5,27 @@ import { CreateProgramaDto } from './dto/create-programa.dto';
 @Injectable()
 export class ProgramasService {
     constructor( private prismaService : PrismaService){}
-
-    async getProgramas(){
-        return await this.prismaService.programa.findMany();
-    }
-
+    
     async createPrograma(data : CreateProgramaDto){
         const programa = await this.prismaService.programa.create({
             data
         });
-        return { message : "Programa created successfully", programa };
+        return { status: 201, message: "Programa created successfully", data: programa };
+    }
+
+    async getProgramas(page: number){
+
+        const records = 10;
+
+        const programas = await this.prismaService.programa.findMany({
+            take: records,
+            skip: (page - 1) * records
+        });
+
+        const programaCount = await this.prismaService.programa.count();
+
+        const totalPages = Math.ceil(programaCount / records);
+
+        return { status: 200, message: "Programas fetched successfully", data: programas, currentPage: page, totalPages };
     }
 }

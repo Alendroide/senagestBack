@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { RolesService } from './roles.service';
 import { CreateRolDto } from './dto/create-rol.dto';
 import { AuthGuard } from '@nestjs/passport';
@@ -22,8 +22,9 @@ export class RolesController {
     @Get()
     @Permiso(11)
     @UseGuards(PermisosGuard)
-    async getRoles() {
-        return await this.rolesService.getRoles();
+    async getRoles(@Query("page",ParseIntPipe) pageQuery : number | undefined) {
+        const page = pageQuery ?? 1;
+        return await this.rolesService.getRoles(page);
     }
 
     @Patch('update/:id')

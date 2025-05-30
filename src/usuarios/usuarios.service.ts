@@ -55,7 +55,7 @@ export class UsuariosService {
 
     async getUsuarios(page: number) {
 
-        const numberOfUsersPerPage = 10;
+        const records = 10;
 
         const users = await this.prismaService.usuario.findMany({
             select: {
@@ -66,21 +66,19 @@ export class UsuariosService {
                 segundoApellido: true,
                 correo: true,
             },
-            take: numberOfUsersPerPage,
-            skip: (page - 1) * numberOfUsersPerPage
+            take: records,
+            skip: (page - 1) * records
         });
 
         const userCount = await this.prismaService.usuario.count();
 
-        const flooredPages = Math.floor(userCount / numberOfUsersPerPage);
-
-        const pagesCount = userCount % numberOfUsersPerPage === 0 ? flooredPages : flooredPages + 1;
+        const totalPages = Math.ceil(userCount / records);
 
         const processedUsers = users.map((user) => ({
             ...user,
             identificacion: `${user.identificacion}`
         }))
 
-        return { status: 200, message: "Users fetched successfully", data: processedUsers, currentPage: page, totalPages: Math.floor(pagesCount) };
+        return { status: 200, message: "Users fetched successfully", data: processedUsers, currentPage: page, totalPages };
     }
 }
