@@ -64,7 +64,7 @@ CREATE TABLE `modulo` (
 
 LOCK TABLES `modulo` WRITE;
 /*!40000 ALTER TABLE `modulo` DISABLE KEYS */;
-INSERT INTO `modulo` VALUES (1,'Modulos','Administración global de módulos','Server'),(2,'Permisos','Permite administrar y asignar permisos','Ban'),(3,'Roles','Modulo de creación y administración de roles','GraduationCap'),(4,'Usuarios','Permite asignación de roles y administración de usuarios en general','UsersRound'),(5,'Programas','Admite el registro y administración de programas de formación','Atom'),(6,'Fichas','Administra las fichas de los programas de formación','Calculator');
+INSERT INTO `modulo` VALUES (1,'Modulos','Administración global de módulos','Server'),(2,'Permisos','Permite administrar y asignar permisos','Ban'),(3,'Roles','Modulo de creación y administración de roles','GraduationCap'),(4,'Usuarios','Permite asignación de roles y administración de usuarios en general','UsersRound'),(5,'Rutas','Admite el registro de nuevas rutas para el FrontEnd','Atom'),(6,'Fichas','Administra las fichas de los programas de formación','Calculator');
 /*!40000 ALTER TABLE `modulo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -79,12 +79,12 @@ CREATE TABLE `permiso` (
   `id` int NOT NULL AUTO_INCREMENT,
   `nombre` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `descripcion` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `tipo` enum('read','write','update','delete') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'read',
+  `tipo` enum('read','write','update','delete') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'read',
   `rutaId` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `Permiso_rutaId_fkey` (`rutaId`),
   CONSTRAINT `Permiso_rutaId_fkey` FOREIGN KEY (`rutaId`) REFERENCES `rutafront` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -93,7 +93,7 @@ CREATE TABLE `permiso` (
 
 LOCK TABLES `permiso` WRITE;
 /*!40000 ALTER TABLE `permiso` DISABLE KEYS */;
-INSERT INTO `permiso` VALUES (1,'Crear Módulo','Permite la creación de módulos nuevos en el sistema','write',1),(2,'Leer Módulos','Permite obtener los módulos existentes en el sistema','read',1),(3,'Actualizar Módulo','Permite actualizar un módulo preexistente','update',1),(4,'Desactivar Módulo','Permite activar o desactivar un módulo preexistente','delete',1),(5,'Crear Permiso','Permite crear permisos a los módulos','write',2),(6,'Leer Permisos','Permite obtener todos los permisos existentes','read',2),(7,'Actualizar Permiso','Permite actualizar un permiso preexistente','update',2),(8,'Desactivar Permiso','Permite activar o desactivar un permiso preexistente','delete',2),(9,'Asignar Permiso','Permite asignar un permiso a un rol','write',3),(10,'Crear Rol','Permite crear nuevos roles en el sistema','write',4),(11,'Leer Roles','Permite obtener todos los roles del sistema','read',4),(12,'Actualizar Rol','Permite actualizar un rol preexistente','update',4),(13,'Desactivar Rol','Permite activar o desactivar un rol preexistente','delete',4),(14,'Crear Usuario','Permiso crear nuevos usuarios en el sistema','write',5),(15,'Leer Usuarios','Permite enlistar a cada usuario del sistema categorizado en roles','read',5),(16,'Actualizar Usuario','Permite actualizar a un usuario del sistema','update',5),(17,'Desactivar Usuario','Permite activar o desactivar a un usuario del sistema','delete',5),(18,'Crear Programa','Permite añadir un programa de formación del SENA','write',6);
+INSERT INTO `permiso` VALUES (1,'Crear Módulo','Permite la creación de módulos nuevos en el sistema','write',1),(2,'Leer Módulos','Permite obtener los módulos existentes en el sistema','read',1),(3,'Actualizar Módulo','Permite actualizar un módulo preexistente','update',1),(4,'Desactivar Módulo','Permite activar o desactivar un módulo preexistente','delete',1),(5,'Crear Permiso','Permite crear permisos a los módulos','write',2),(6,'Leer Permisos','Permite obtener todos los permisos existentes','read',2),(7,'Actualizar Permiso','Permite actualizar un permiso preexistente','update',2),(8,'Desactivar Permiso','Permite activar o desactivar un permiso preexistente','delete',2),(9,'Asignar Permiso','Permite asignar un permiso a un rol','write',3),(10,'Crear Rol','Permite crear nuevos roles en el sistema','write',4),(11,'Leer Roles','Permite obtener todos los roles del sistema','read',4),(12,'Actualizar Rol','Permite actualizar un rol preexistente','update',4),(13,'Desactivar Rol','Permite activar o desactivar un rol preexistente','delete',4),(14,'Crear Usuario','Permiso crear nuevos usuarios en el sistema','write',5),(15,'Leer Usuarios','Permite enlistar a cada usuario del sistema categorizado en roles','read',5),(16,'Actualizar Usuario','Permite actualizar a un usuario del sistema','update',5),(17,'Desactivar Usuario','Permite activar o desactivar a un usuario del sistema','delete',5),(18,'Crear Ruta','Permite crear nuevas rutas en el sistema','write',6),(19,'Leer Rutas','Permite obtener toda ruta del sistema','read',6),(20,'Actualizar Ruta','Permite actualizar una ruta preexistente en el sistema','update',6),(21,'Desactivar Ruta','Permite inhabilitar una ruta de el sistema','delete',6);
 /*!40000 ALTER TABLE `permiso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -172,7 +172,7 @@ CREATE TABLE `rolpermiso` (
 
 LOCK TABLES `rolpermiso` WRITE;
 /*!40000 ALTER TABLE `rolpermiso` DISABLE KEYS */;
-INSERT INTO `rolpermiso` VALUES (1,1,1),(1,2,0),(2,1,1),(2,2,0),(5,1,1),(6,1,1),(6,2,1),(9,1,1),(10,1,1),(11,1,1),(14,1,1),(14,22,1),(15,1,1),(15,22,1);
+INSERT INTO `rolpermiso` VALUES (1,1,1),(1,2,0),(2,1,1),(2,2,0),(5,1,1),(6,1,1),(6,2,1),(9,1,1),(10,1,1),(11,1,1),(14,1,1),(14,22,1),(15,1,1),(15,22,1),(18,1,1),(19,1,1),(20,1,1),(21,1,1);
 /*!40000 ALTER TABLE `rolpermiso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -200,7 +200,7 @@ CREATE TABLE `rutafront` (
 
 LOCK TABLES `rutafront` WRITE;
 /*!40000 ALTER TABLE `rutafront` DISABLE KEYS */;
-INSERT INTO `rutafront` VALUES (1,'home','Administrar módulos',1),(2,'home','Administrar permisos',2),(3,'asign','Asignar permisos',2),(4,'home','Administrar roles',3),(5,'home','Administrar usuarios',4),(6,'home','Administrar programas',5);
+INSERT INTO `rutafront` VALUES (1,'home','Administrar módulos',1),(2,'home','Administrar permisos',2),(3,'asign','Asignar permisos',2),(4,'home','Administrar roles',3),(5,'home','Administrar usuarios',4),(6,'home','Administrar rutas',5);
 /*!40000 ALTER TABLE `rutafront` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -253,4 +253,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-05-28 11:37:54
+-- Dump completed on 2025-05-30 11:09:57
