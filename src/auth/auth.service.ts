@@ -75,6 +75,7 @@ export class AuthService {
           }
         },
         select: {
+          id: true,
           nombre: true,
           icono: true,
           rutas: {
