@@ -21,7 +21,7 @@ export class PermisosController {
         return await this.permisosService.createPermiso(body);
     }
 
-    @Get('bymodulo')
+    @Get()
     @Permiso(6)
     @UseGuards(PermisosGuard)
     async getPermisos () {

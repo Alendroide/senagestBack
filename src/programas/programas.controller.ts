@@ -10,18 +10,18 @@ export class ProgramasController {
 
     constructor(private programasService : ProgramasService){}
 
+    @Post()
+    @UseGuards(AuthGuard('jwt'),RolesGuard)
+    @Roles()
+    async createPrograma(@Body() data : CreateProgramaDto) {
+        return await this.programasService.createPrograma(data);
+    }
+
     @Get()
     @UseGuards(AuthGuard('jwt'),RolesGuard)
     @Roles('Aprendiz')
     async getProgramas(@Query("page",ParseIntPipe) pageQuery : number | undefined){
         const page = pageQuery ?? 1;
         return await this.programasService.getProgramas(page);
-    }
-
-    @Post()
-    @UseGuards(AuthGuard('jwt'),RolesGuard)
-    @Roles()
-    async createPrograma(@Body() data : CreateProgramaDto) {
-        return await this.programasService.createPrograma(data);
     }
 }
