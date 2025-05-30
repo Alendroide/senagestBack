@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseBoolPipe, ParseIntPipe, Patch, Post, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseBoolPipe, ParseIntPipe, Patch, Post, Query, Request, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { PermisosService } from './permisos.service';
 import { CreatePermisoDto } from './dto/create-permiso.dto';
@@ -19,11 +19,12 @@ export class PermisosController {
         return await this.permisosService.createPermiso(body);
     }
 
-    @Get()
+    @Get(':id')
     @Permiso(6)
     @UseGuards(PermisosGuard)
-    async getPermisos () {
-        return await this.permisosService.getPermisos();
+    async getPermisos ( @Param('id',ParseIntPipe) id: number, @Query("page",ParseIntPipe) pageQuery : number) {
+        const page = pageQuery || 1;
+        return await this.permisosService.getPermisos (id, page );
     }
 
     @Patch('update/:id')
