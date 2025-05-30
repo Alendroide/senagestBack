@@ -41,6 +41,7 @@ export class UsuariosController {
                     fit: 'cover',
                     withoutEnlargement: false,
                 })
+                .jpeg({quality: 70})
                 .toFile(`./uploads/resize-${file.filename}`);
         }
         return await this.usuariosService.createUsuario(body, file);
