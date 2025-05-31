@@ -8,6 +8,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { RolesModule } from './roles/roles.module';
 import { RolpermisoModule } from './rolpermiso/rolpermiso.module';
+import { RutasModule } from './rutas/rutas.module';
 
 @Module({
   imports: [
@@ -21,7 +22,8 @@ import { RolpermisoModule } from './rolpermiso/rolpermiso.module';
     PermisosModule,
     ProgramasModule,
     RolesModule,
-    RolpermisoModule
+    RolpermisoModule,
+    RutasModule
   ],
 })
 export class AppModule {}
