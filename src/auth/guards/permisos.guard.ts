@@ -5,31 +5,30 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class PermisosGuard implements CanActivate {
+  constructor(
+    private reflector: Reflector,
+    private prismaService: PrismaService,
+  ) {}
 
-  constructor(private reflector : Reflector, private prismaService : PrismaService) {}
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const permisos: number[] = this.reflector.get<number[]>(PERMISO_KEY, context.getHandler());
 
-  async canActivate(
-    context: ExecutionContext,
-  ): Promise<boolean> {
-
-    const permiso = this.reflector.get<number>(PERMISO_KEY,context.getHandler());
     const { user } = context.switchToHttp().getRequest();
-    
-    if(!user) throw new HttpException("Not logged in", HttpStatus.UNAUTHORIZED);
 
-    const [hasAccess] = await this.prismaService.rolPermiso.findMany({
-      where : {
-        AND : {
-          rolId : user.rol,
-          permisoId : permiso,
-          valor : true
-        }
-      }
-    })
+    if (!user) throw new HttpException("Not logged in", HttpStatus.UNAUTHORIZED);
 
-    if(!hasAccess) return false;
+    if (!permisos || permisos.length === 0) return true;
 
-    return true;
+    const permisosDelRol = await this.prismaService.rolPermiso.findMany({
+      where: {
+        rolId: user.rol,
+        permisoId: { in: permisos },
+        valor: true,
+      },
+    });
 
+    if (permisosDelRol.length > 0) return true;
+
+    throw new HttpException("Forbidden", HttpStatus.FORBIDDEN);
   }
 }
