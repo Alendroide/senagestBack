@@ -114,6 +114,9 @@ export class UsuariosService {
                         nombre: true,
                         icono: true,
                         permisos: {
+                            where: {
+                                valor: true
+                            },
                             select: {
                                 permiso: {
                                     select: {
@@ -134,6 +137,7 @@ export class UsuariosService {
             ...user,
             identificacion: `${user?.identificacion}`,
             rol : {
+                ...user?.rol,
                 permisos: user?.rol?.permisos.map((permiso) => permiso.permiso)
             }
         }
