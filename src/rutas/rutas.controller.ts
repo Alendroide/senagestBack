@@ -21,9 +21,9 @@ export class RutasController {
     @Get('module/:id')
     @Permiso(19)
     @UseGuards(PermisosGuard)
-    async getRutas( @Param('id',ParseIntPipe) id: number, @Query("page",ParseIntPipe) pageQuery : number | undefined) {
+    async getRutasByModule( @Param('id',ParseIntPipe) id: number, @Query("page",ParseIntPipe) pageQuery : number | undefined) {
         const page = pageQuery ?? 1;
-        return await this.rutasService.getRutas(id, page);
+        return await this.rutasService.getRutasByModule(id, page);
     }
 
     @Get("all/module/:id")
@@ -31,13 +31,6 @@ export class RutasController {
     @UseGuards(PermisosGuard)
     async getAllRutasByModule (@Param('id',ParseIntPipe) id: number) {
         return await this.rutasService.getAllRutasByModule(id);
-    }
-
-    @Get("modules")
-    @Permiso(19)
-    @UseGuards(PermisosGuard)
-    async getModules () {
-        return await this.rutasService.getModules();
     }
 
     @Patch('update/:id')

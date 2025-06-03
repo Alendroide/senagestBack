@@ -16,7 +16,6 @@ export class RolpermisoController {
         return await this.rolpermisoService.asignPermiso(permisoId,rolId,valor);
     }
 
-    // GET PERMISOS BY ROLE
     @Get('/role/:rolId')
     @Permiso(9)
     @UseGuards(PermisosGuard)

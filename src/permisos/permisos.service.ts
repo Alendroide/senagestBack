@@ -16,15 +16,6 @@ export class PermisosService {
     };
   }
 
-  async getModules() {
-    const modules = await this.prismaService.modulo.findMany();
-    return {
-      status: 200,
-      message: 'Modules found successfully',
-      data: modules,
-    };
-  }
-
   async getPermisos(id: number, page: number) {
 
     const records = 10;

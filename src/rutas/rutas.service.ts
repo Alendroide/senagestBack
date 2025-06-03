@@ -12,7 +12,7 @@ export class RutasService {
     return { status: 201, message: 'Ruta created successfully', data: newRuta };
   }
 
-  async getRutas(id: number, page: number) {
+  async getRutasByModule(id: number, page: number) {
     const records = 10;
 
     const rutas = await this.prismaService.modulo.findUnique({

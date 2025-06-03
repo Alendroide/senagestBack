@@ -27,14 +27,6 @@ export class PermisosController {
         return await this.permisosService.getPermisos (id, page );
     }
 
-    @Get("modules")
-    @Permiso(6)
-    @UseGuards(PermisosGuard)
-    async getModules () {
-        return await this.permisosService.getModules();
-    }
-
-
     @Patch('update/:id')
     @Permiso(7)
     @UseGuards(PermisosGuard)

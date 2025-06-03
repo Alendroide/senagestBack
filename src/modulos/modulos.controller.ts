@@ -27,6 +27,13 @@ export class ModulosController {
         return await this.modulosService.getModulos(page);
     }
 
+    @Get("all")
+    @Permiso(2,6,19)
+    @UseGuards(PermisosGuard)
+    async getAllModulos () {
+        return await this.modulosService.getAllModulos();
+    }
+
     @Patch('update/:id')
     @Permiso(3)
     @UseGuards(PermisosGuard)

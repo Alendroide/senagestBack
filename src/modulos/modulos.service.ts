@@ -29,6 +29,15 @@ export class ModulosService {
         return { status: 200, message: "Modulos fetched successfully", data: modulos, currentPage: page, totalPages };
     }
 
+    async getAllModulos() {
+        const modules = await this.prismaService.modulo.findMany();
+        return {
+        status: 200,
+        message: 'Modules found successfully',
+        data: modules,
+        };
+    }
+
     async updateModulo(id: number, data: UpdateModuloDto) {
         const updatedModulo = await this.prismaService.modulo.update({
             where: {
