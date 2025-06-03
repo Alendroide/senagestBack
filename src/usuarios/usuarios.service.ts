@@ -92,4 +92,52 @@ export class UsuariosService {
 
         return { status: 200, message: "Users fetched successfully", data: processedUsers, currentPage: page, totalPages };
     }
+
+    async getProfile(userId: number){
+
+        const user = await this.prismaService.usuario.findUnique({
+            where: {id: userId},
+            select: {
+                id: true,
+                identificacion: true,
+                primerNombre: true,
+                segundoNombre: true,
+                primerApellido: true,
+                segundoApellido: true,
+                correo: true,
+                fichaId: true,
+                img: true,
+                fechaNacimiento: true,
+                rol: {
+                    select: {
+                        id: true,
+                        nombre: true,
+                        icono: true,
+                        permisos: {
+                            select: {
+                                permiso: {
+                                    select: {
+                                        id: true,
+                                        nombre: true,
+                                        descripcion: true,
+                                        tipo: true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        const userParsed = {
+            ...user,
+            identificacion: `${user?.identificacion}`,
+            rol : {
+                permisos: user?.rol?.permisos.map((permiso) => permiso.permiso)
+            }
+        }
+
+        return { status: 200, message: "Profile fetched successfully", data: userParsed };
+    }
 }

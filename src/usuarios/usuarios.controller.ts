@@ -18,7 +18,8 @@ export class UsuariosController {
 
     @Get('perfil')
     getProfile(@Request() req: any) {
-        return req.user;
+        const userId = req.user.sub;
+        return this.usuariosService.getProfile(userId);
     }
 
     @Post()
