@@ -37,7 +37,7 @@ export class RolesController {
     @Patch('update/:id')
     @Permiso(12)
     @UseGuards(PermisosGuard)
-    async updateRol(@Param('id',ParseIntPipe) id: number, data: UpdateRolDto) {
+    async updateRol(@Param('id',ParseIntPipe) id: number, @Body() data: UpdateRolDto) {
         return await this.rolesService.updateRol(id, data);
     }
 
