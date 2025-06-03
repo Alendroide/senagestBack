@@ -27,6 +27,13 @@ export class RolesController {
         return await this.rolesService.getRoles(page);
     }
 
+    @Get('/all')
+    @Permiso(11,9)
+    @UseGuards(PermisosGuard)
+    async getAllRoles () {
+        return await this.rolesService.getAllRoles();
+    }
+
     @Patch('update/:id')
     @Permiso(12)
     @UseGuards(PermisosGuard)

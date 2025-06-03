@@ -25,19 +25,6 @@ export class PermisosService {
     };
   }
 
-  async getRutasByModule(id: number) {
-    const rutas = await this.prismaService.rutaFront.findMany({
-      where: {
-        moduloId: id,
-      },
-    });
-    return {
-      status: 200,
-      message: 'Rutas found successfully',
-      data: rutas,
-    };
-  }
-
   async getPermisos(id: number, page: number) {
 
     const records = 10;

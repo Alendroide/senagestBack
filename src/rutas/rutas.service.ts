@@ -52,6 +52,19 @@ export class RutasService {
     };
   }
 
+  async getAllRutasByModule(id: number) {
+    const rutas = await this.prismaService.rutaFront.findMany({
+      where: {
+        moduloId: id,
+      },
+    });
+    return {
+      status: 200,
+      message: 'Rutas found successfully',
+      data: rutas,
+    };
+  }
+
   async getModules() {
     const modules = await this.prismaService.modulo.findMany();
     return {

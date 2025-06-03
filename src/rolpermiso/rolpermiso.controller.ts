@@ -24,12 +24,4 @@ export class RolpermisoController {
         return await this.rolpermisoService.getRolePermisos(rolId);
     }
 
-    // GET ALL ROLES
-    @Get('/roles')
-    @Permiso(9)
-    @UseGuards(PermisosGuard)
-    async getRoles () {
-        return await this.rolpermisoService.getRoles();
-    }
-
 }

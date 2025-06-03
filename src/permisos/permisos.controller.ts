@@ -19,13 +19,6 @@ export class PermisosController {
         return await this.permisosService.createPermiso(body);
     }
 
-    @Get("routes/:id")
-    @Permiso(5)
-    @UseGuards(PermisosGuard)
-    async getRutasByModule (@Param('id',ParseIntPipe) id: number) {
-        return await this.permisosService.getRutasByModule(id);
-    }
-
     @Get('module/:id')
     @Permiso(6)
     @UseGuards(PermisosGuard)

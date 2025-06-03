@@ -27,6 +27,11 @@ export class RolesService {
     return { status: 200, message: "Roles fetched successfully", data: roles, currentPage: page, totalPages };
   }
 
+  async getAllRoles() {
+    const roles = await this.prismaService.rol.findMany();
+    return { status: 200, message: "Roles fetched successfully", data: roles };
+  }
+
   async updateRol(id: number, data: UpdateRolDto){
     const updatedRol = await this.prismaService.rol.update({
       where: {

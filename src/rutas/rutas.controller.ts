@@ -26,6 +26,13 @@ export class RutasController {
         return await this.rutasService.getRutas(id, page);
     }
 
+    @Get("all/module/:id")
+    @Permiso(19,5)
+    @UseGuards(PermisosGuard)
+    async getAllRutasByModule (@Param('id',ParseIntPipe) id: number) {
+        return await this.rutasService.getAllRutasByModule(id);
+    }
+
     @Get("modules")
     @Permiso(19)
     @UseGuards(PermisosGuard)
