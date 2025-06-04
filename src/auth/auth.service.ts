@@ -117,4 +117,66 @@ export class AuthService {
     // Retornar JWT
     return { status: 200, message: "Login successful", access_token: this.jwtService.sign(payload), modulos };
   }
+
+  async refetchPermisos(rolId?: number){
+    const modulos: Modulo[] | undefined = rolId ? await this.prismaService.modulo.findMany({
+      where: {
+        rutas: {
+          some: {
+            permisos: {
+              some: {
+                roles: {
+                  some: {
+                    rolId: rolId,
+                    valor: true,
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      select: {
+        id: true,
+        nombre: true,
+        icono: true,
+        rutas: {
+          where: {
+            permisos: {
+              some: {
+                roles: {
+                  some: {
+                    rolId: rolId,
+                    valor: true,
+                  }
+                }
+              }
+            }
+          },
+          select: {
+            id: true,
+            nombre: true,
+            ruta: true,
+            permisos: {
+              where: {
+                roles: {
+                  some: {
+                    rolId: rolId,
+                    valor: true,
+                  }
+                }
+              },
+              select: {
+                id: true,
+                nombre: true,
+                tipo: true,
+              }
+            }
+          }
+        }
+      }
+    }) : undefined;
+
+    return { status: 200, message: "User permisos fetched successfully", modulos };
+  }
 }
