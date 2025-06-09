@@ -1,8 +1,9 @@
-import { IsEmail, IsNotEmpty, IsString } from "class-validator";
+import { IsNotEmpty, IsString } from "class-validator";
+import { IsEmailUnlessAdmin } from "./validator/IsEmailUnlessAdmin.validator";
 
 export class LoginDto {
     
-    @IsEmail()
+    @IsEmailUnlessAdmin()
     @IsNotEmpty()
     correo : string;
 
