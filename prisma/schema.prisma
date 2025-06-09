@@ -15,8 +15,8 @@ datasource db {
 
 model Programa {
   id Int @id @default(autoincrement())
-  nombre String @db.VarChar(40)
-  abreviacion String @db.VarChar(10)
+  nombre String @db.VarChar(40) @unique
+  abreviacion String @db.VarChar(10) @unique
   fichas Ficha[]
   estado Boolean @default(true)
 }
@@ -49,7 +49,7 @@ model Usuario {
 
 model Rol {
   id Int @id @default(autoincrement())
-  nombre String @db.VarChar(20)
+  nombre String @db.VarChar(20) @unique
   descripcion String @db.VarChar(255)
   icono String @db.VarChar(30) @default("User")
   usuarios Usuario[]
@@ -75,7 +75,7 @@ enum tipoPermiso {
 
 model Permiso {
   id Int @id @default(autoincrement())
-  nombre String @db.VarChar(30)
+  nombre String @db.VarChar(30) @unique
   descripcion String @db.VarChar(255)
   tipo tipoPermiso @default(read)
   rutaId Int
@@ -95,7 +95,7 @@ model Modulo {
 
 model RutaFront {
   id Int @id @default(autoincrement())
-  nombre String @db.VarChar(30)
+  nombre String @db.VarChar(30) @unique
   ruta String @db.VarChar(255)
   permisos Permiso[]
   moduloId Int
