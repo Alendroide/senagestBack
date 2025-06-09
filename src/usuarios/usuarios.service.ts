@@ -216,10 +216,10 @@ export class UsuariosService {
     const userParsed = {
       ...user,
       identificacion: `${user?.identificacion}`,
-      rol: {
-        ...user?.rol,
-        permisos: user?.rol?.permisos.map((permiso) => permiso.permiso),
-      },
+      rol: user?.rol ? {
+        ...user.rol,
+        permisos: user.rol.permisos.map((permiso) => permiso.permiso),
+      } : undefined,
     };
 
     return {
