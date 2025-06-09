@@ -45,7 +45,12 @@ export class UsuariosController {
                 })
                 .png({compressionLevel: 9})
                 .toFile(`./uploads/resize-${file.filename}`);
-            await fs.unlink(file.path);
+            try{
+                await fs.unlink(file.path);
+            }
+            catch(error){
+                console.log(error);
+            }
         }
         return await this.usuariosService.createUsuario(body, file);
     }
