@@ -28,20 +28,19 @@ export class CreateUsuarioDto {
     @IsNotEmpty()
     correo: string;
 
-    @IsString()
-    @IsNotEmpty()
-    @MinLength(8)
-    contrasena: string;
-
     @IsNotEmpty()
     @IsISO8601()
     fechaNacimiento: Date;
 
     @IsNumber()
-    @IsNotEmpty()
     @IsOptional()
     @Type(() => Number)
     fichaId?: number;
+
+    @IsNumber()
+    @IsOptional()
+    @Type(() => Number)
+    rolId?: number;
 
     @IsOptional()
     img?: any;

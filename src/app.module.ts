@@ -9,9 +9,13 @@ import { join } from 'path';
 import { RolesModule } from './roles/roles.module';
 import { RolpermisoModule } from './rolpermiso/rolpermiso.module';
 import { RutasModule } from './rutas/rutas.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true
+    }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname,'..','uploads'),
       serveRoot: '/uploads',
