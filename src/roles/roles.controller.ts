@@ -28,7 +28,7 @@ export class RolesController {
     }
 
     @Get('/all')
-    @Permiso(11,9)
+    @Permiso(11,9,14)
     @UseGuards(PermisosGuard)
     async getAllRoles () {
         return await this.rolesService.getAllRoles();
