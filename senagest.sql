@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS `ficha`;
 CREATE TABLE `ficha` (
   `codigo` int NOT NULL,
   `programaId` int NOT NULL,
-  `estado` tinyint(1) DEFAULT '1',
+  `estado` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`codigo`),
   KEY `Ficha_programaId_fkey` (`programaId`),
   CONSTRAINT `Ficha_programaId_fkey` FOREIGN KEY (`programaId`) REFERENCES `programa` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
@@ -54,7 +54,7 @@ CREATE TABLE `modulo` (
   `nombre` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `descripcion` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `icono` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Book',
-  `estado` tinyint(1) DEFAULT '1',
+  `estado` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `Modulo_nombre_key` (`nombre`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -83,8 +83,9 @@ CREATE TABLE `permiso` (
   `descripcion` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `tipo` enum('read','write','update','delete') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'read',
   `rutaId` int NOT NULL,
-  `estado` tinyint(1) DEFAULT '1',
+  `estado` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
+  UNIQUE KEY `Permiso_nombre_key` (`nombre`),
   KEY `Permiso_rutaId_fkey` (`rutaId`),
   CONSTRAINT `Permiso_rutaId_fkey` FOREIGN KEY (`rutaId`) REFERENCES `rutafront` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -111,8 +112,10 @@ CREATE TABLE `programa` (
   `id` int NOT NULL AUTO_INCREMENT,
   `nombre` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `abreviacion` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `estado` tinyint(1) DEFAULT '1',
-  PRIMARY KEY (`id`)
+  `estado` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `Programa_nombre_key` (`nombre`),
+  UNIQUE KEY `Programa_abreviacion_key` (`abreviacion`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -138,8 +141,9 @@ CREATE TABLE `rol` (
   `nombre` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `descripcion` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `icono` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'User',
-  `estado` tinyint(1) DEFAULT '1',
-  PRIMARY KEY (`id`)
+  `estado` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `Rol_nombre_key` (`nombre`)
 ) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -193,8 +197,9 @@ CREATE TABLE `rutafront` (
   `ruta` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `nombre` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `moduloId` int NOT NULL,
-  `estado` tinyint(1) DEFAULT '1',
+  `estado` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
+  UNIQUE KEY `RutaFront_nombre_key` (`nombre`),
   KEY `RutaFront_moduloId_fkey` (`moduloId`),
   CONSTRAINT `RutaFront_moduloId_fkey` FOREIGN KEY (`moduloId`) REFERENCES `modulo` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -230,7 +235,7 @@ CREATE TABLE `usuario` (
   `rolId` int DEFAULT NULL,
   `fechaNacimiento` datetime(3) NOT NULL,
   `img` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'defaultpfp.png',
-  `estado` tinyint(1) DEFAULT '1',
+  `estado` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `Usuario_identificacion_key` (`identificacion`),
   UNIQUE KEY `Usuario_correo_key` (`correo`),
@@ -260,4 +265,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-06-06  8:58:26
+-- Dump completed on 2025-06-13 11:00:56
