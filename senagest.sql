@@ -252,7 +252,7 @@ CREATE TABLE `usuario` (
 
 LOCK TABLES `usuario` WRITE;
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
-INSERT INTO `usuario` VALUES (1,1079534351,'Luis','Alejandro','Bonilla','Echeverri','pepe@gmail.com','$2b$10$g5nHMpmQXtMlFwG3paml3.03kOXSgnSwqH/gG63V3qIMQFyVcP4E6',2846103,1,'2005-02-06 17:00:00.000','defaultpfp.png',1),(2,1070598678,'Estefany','Daniela','Parada','Escalante','kesito@gmail.com','$2b$10$Et6e/Saehq06WLeS8THpEujK0etzych9DFBy29Qib8eZnUOd1mzqy',2900810,2,'2007-11-11 23:00:00.000','defaultpfp.png',1);
+INSERT INTO `usuario` VALUES (1,1079534351,'Luis','Alejandro','Bonilla','Echeverri','admin','$2b$10$g5nHMpmQXtMlFwG3paml3.03kOXSgnSwqH/gG63V3qIMQFyVcP4E6',2846103,1,'2005-02-06 17:00:00.000','defaultpfp.png',1),(2,1070598678,'Estefany','Daniela','Parada','Escalante','kesito@gmail.com','$2b$10$Et6e/Saehq06WLeS8THpEujK0etzych9DFBy29Qib8eZnUOd1mzqy',2900810,2,'2007-11-11 23:00:00.000','defaultpfp.png',1);
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -265,4 +265,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-06-13 11:00:56
+-- Dump completed on 2025-06-13 11:03:00
