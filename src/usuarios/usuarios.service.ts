@@ -4,6 +4,7 @@ import * as bcrypt from 'bcrypt';
 import * as nodemailer from 'nodemailer';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { ConfigService } from '@nestjs/config';
+import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 
 @Injectable()
 export class UsuariosService {
@@ -172,6 +173,42 @@ export class UsuariosService {
       currentPage: page,
       totalPages,
     };
+  }
+
+  async updateUser(userId: number, data: UpdateUsuarioDto) {
+
+    if (data.fichaId) {
+      const ficha = await this.prismaService.ficha.findUnique({
+        where: { codigo: data.fichaId },
+      });
+
+      if (!ficha)
+        throw new HttpException(
+          { status: 404, message: 'Ficha not found.' },
+          HttpStatus.NOT_FOUND,
+        );
+    }
+
+    const existingUser = await this.prismaService.usuario.findUnique({
+      where: {
+        id: userId
+      },
+    });
+
+    if (!existingUser)
+      throw new HttpException(
+        { status: 404, message: 'User not found' },
+        HttpStatus.NOT_FOUND,
+    );
+
+    const updatedUser = await this.prismaService.usuario.update({
+      where: {
+        id: userId
+      },
+      data
+    })
+
+    return { status: 200, message: "User updated successfully", data: updatedUser}
   }
 
   async getProfile(userId: number) {
