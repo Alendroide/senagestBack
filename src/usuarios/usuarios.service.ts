@@ -149,6 +149,7 @@ export class UsuariosService {
         correo: true,
         fichaId: true,
         fechaNacimiento: true,
+        rolId: true
       },
       orderBy: {
         fichaId: 'asc',
@@ -208,7 +209,7 @@ export class UsuariosService {
       data
     })
 
-    return { status: 200, message: "User updated successfully", data: updatedUser}
+    return { status: 200, message: "User updated successfully", data: {...updatedUser, identificacion: `${updatedUser.identificacion}`}}
   }
 
   async getProfile(userId: number) {
