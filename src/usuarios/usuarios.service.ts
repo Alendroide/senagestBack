@@ -175,7 +175,7 @@ export class UsuariosService {
     };
   }
 
-  async updateUser(userId: number, data: UpdateUsuarioDto) {
+  async updateUsuario(userId: number, data: UpdateUsuarioDto) {
 
     if (data.fichaId) {
       const ficha = await this.prismaService.ficha.findUnique({
