@@ -1,4 +1,4 @@
-import { Body, Controller, Get, ParseIntPipe, Post, Query, Request, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, Query, Request, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { UsuariosService } from './usuarios.service';
 import { PermisosGuard } from 'src/auth/guards/permisos.guard';
@@ -9,6 +9,7 @@ import { extname } from 'path';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import * as sharp from 'sharp';
 import { promises as fs } from 'fs';
+import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('usuarios')
@@ -61,6 +62,13 @@ export class UsuariosController {
     async getUsuarios(@Query("page", ParseIntPipe) pageQuery: number | undefined) {
         const page = pageQuery ?? 1;
         return await this.usuariosService.getUsuarios(page);
+    }
+
+    @Patch(":id")
+    @Permiso(16)
+    @UseGuards(PermisosGuard)
+    async updateUsuario(@Param("id", ParseIntPipe) id, @Body() data: UpdateUsuarioDto) {
+        return await this.usuariosService.updateUsuario(id, data);
     }
 
 }
