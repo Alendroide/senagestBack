@@ -149,7 +149,8 @@ export class UsuariosService {
         correo: true,
         fichaId: true,
         fechaNacimiento: true,
-        rolId: true
+        rolId: true,
+        estado: true
       },
       orderBy: {
         fichaId: 'asc',
