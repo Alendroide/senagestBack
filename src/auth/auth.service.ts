@@ -20,7 +20,7 @@ export class AuthService {
   async login(data: LoginDto): Promise<any> {
     // Buscar el usuario
     const user = await this.prismaService.usuario.findUnique({
-      where: { correo: data.correo },
+      where: { correo: data.correo, estado: true },
       select: {
         id: true,
         identificacion: true,
@@ -71,7 +71,8 @@ export class AuthService {
               }
             }
           }
-        }
+        },
+        estado: true
       },
       select: {
         id: true,
@@ -88,7 +89,8 @@ export class AuthService {
                   }
                 }
               }
-            }
+            },
+            estado: true
           },
           select: {
             id: true,
@@ -101,7 +103,8 @@ export class AuthService {
                     rolId: user.rolId,
                     valor: true,
                   }
-                }
+                },
+                estado: true
               },
               select: {
                 id: true,
@@ -134,7 +137,8 @@ export class AuthService {
               }
             }
           }
-        }
+        },
+        estado: true
       },
       select: {
         id: true,
@@ -151,7 +155,8 @@ export class AuthService {
                   }
                 }
               }
-            }
+            },
+            estado: true
           },
           select: {
             id: true,
@@ -164,7 +169,8 @@ export class AuthService {
                     rolId: rolId,
                     valor: true,
                   }
-                }
+                },
+                estado: true
               },
               select: {
                 id: true,
