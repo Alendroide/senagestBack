@@ -66,6 +66,9 @@ export class AuthService {
                   some: {
                     rolId: user.rolId,
                     valor: true, // para que solo permisos activos
+                    rol: {
+                      estado: true
+                    }
                   }
                 }
               }
@@ -132,6 +135,9 @@ export class AuthService {
                   some: {
                     rolId: rolId,
                     valor: true,
+                    rol: {
+                      estado: true
+                    }
                   }
                 }
               }
