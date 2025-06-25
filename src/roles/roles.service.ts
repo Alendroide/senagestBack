@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateRolDto } from './dto/create-rol.dto';
 import { UpdateRolDto } from './dto/update-rol.dto';
@@ -43,7 +43,23 @@ export class RolesService {
   }
 
   async updateStatus(id: number) {
-    return "In process";
+    const existingRol = await this.prismaService.rol.findUnique({
+        where: {
+            id
+        }
+    });
+    if(!existingRol) throw new HttpException({ status: 404, message: "Rol not found" }, HttpStatus.NOT_FOUND);
+
+    const updatedRol = await this.prismaService.rol.update({
+        where: {
+            id
+        },
+        data: {
+            estado: !existingRol.estado
+        }
+    })
+
+    return { status: 200, message: "status updated successfully", data: updatedRol};
   }
 
 }

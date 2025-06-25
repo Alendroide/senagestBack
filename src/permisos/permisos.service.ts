@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreatePermisoDto } from './dto/create-permiso.dto';
 import { UpdatePermisoDto } from './dto/update-permiso.dto';
@@ -74,6 +74,22 @@ export class PermisosService {
   }
 
   async updateStatus(id: number) {
-    return 'In process';
+      const existingPermiso = await this.prismaService.permiso.findUnique({
+          where: {
+              id
+          }
+      });
+      if(!existingPermiso) throw new HttpException({ status: 404, message: "Permiso not found" }, HttpStatus.NOT_FOUND);
+
+      const updatedPermiso = await this.prismaService.permiso.update({
+          where: {
+              id
+          },
+          data: {
+              estado: !existingPermiso.estado
+          }
+      })
+
+      return { status: 200, message: "status updated successfully", data: updatedPermiso};
   }
 }
