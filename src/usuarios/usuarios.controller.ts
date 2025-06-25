@@ -71,4 +71,11 @@ export class UsuariosController {
         return await this.usuariosService.updateUsuario(id, data);
     }
 
+    @Patch("status/:id")
+    @Permiso(17)
+    @UseGuards(PermisosGuard)
+    async updateStatus(@Param("id", ParseIntPipe) id: number) {
+        return await this.usuariosService.updateStatus(id);
+    }
+
 }

@@ -266,4 +266,25 @@ export class UsuariosService {
       data: userParsed,
     };
   }
+
+  async updateStatus(id: number) {
+    const existingUsuario = await this.prismaService.usuario.findUnique({
+        where: {
+            id
+        }
+    });
+    if(!existingUsuario) throw new HttpException({ status: 404, message: "Usuario not found" }, HttpStatus.NOT_FOUND);
+
+    const updatedUsuario = await this.prismaService.usuario.update({
+        where: {
+            id
+        },
+        data: {
+            estado: !existingUsuario.estado
+        }
+    })
+
+    return { status: 200, message: "status updated successfully", data: {...updatedUsuario, identificacion: `${updatedUsuario.identificacion}`}};
+  }
+
 }
