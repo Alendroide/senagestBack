@@ -24,6 +24,12 @@ export class PermisosGuard implements CanActivate {
         rolId: user.rol,
         permisoId: { in: permisos },
         valor: true,
+        permiso: {
+          estado: true
+        },
+        rol: {
+          estado: true
+        }
       },
     });
 
