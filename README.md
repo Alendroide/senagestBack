@@ -15,6 +15,10 @@
         JWT_EXPIRATION = "expiracion"
     #DATABASE
         DATABASE_URL = "dsn"
+    #MAILER
+        MAILER_SERVICE = 'mailer'
+        MAILER_USER = 'account'
+        MAILER_PASS = 'password'
 ```
 
 ### 3. Sincronizar la base de datos
