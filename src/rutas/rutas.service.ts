@@ -12,7 +12,7 @@ export class RutasService {
     return { status: 201, message: 'Ruta created successfully', data: newRuta };
   }
 
-  async getRutasByModule(id: number, page: number) {
+  async getRutasByModule(id: number, page: number, search?: string) {
     const records = 10;
 
     const rutas = await this.prismaService.modulo.findUnique({
@@ -24,6 +24,7 @@ export class RutasService {
         nombre: true,
         icono: true,
         rutas: {
+          where: search ? {nombre: {contains: search}} : {},
           select: {
             id: true,
             nombre: true,
