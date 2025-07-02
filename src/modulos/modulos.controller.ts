@@ -22,9 +22,9 @@ export class ModulosController {
     @Get()
     @Permiso(2)
     @UseGuards(PermisosGuard)
-    async getModulos(@Query('page',ParseIntPipe) pageQuery: number) {
+    async getModulos(@Query('page',ParseIntPipe) pageQuery: number, @Query('search') search?: string) {
         const page = pageQuery ?? 1;
-        return await this.modulosService.getModulos(page);
+        return await this.modulosService.getModulos(page, search);
     }
 
     @Get("all")

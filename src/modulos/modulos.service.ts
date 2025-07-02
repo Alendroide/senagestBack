@@ -13,11 +13,12 @@ export class ModulosService {
         return { status: 201, message : "Modulo created successfully.", data: newModulo };
     }
 
-    async getModulos(page: number) {
+    async getModulos(page: number, search?: string) {
 
         const records = 10;
 
         const modulos = await this.prismaService.modulo.findMany({
+            where: search ? {nombre:{ contains: search }} : {},
             take: records,
             skip: (page - 1) * records
         });
