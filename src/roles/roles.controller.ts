@@ -22,9 +22,9 @@ export class RolesController {
     @Get()
     @Permiso(11)
     @UseGuards(PermisosGuard)
-    async getRoles(@Query("page",ParseIntPipe) pageQuery : number | undefined) {
+    async getRoles(@Query("page",ParseIntPipe) pageQuery : number | undefined, @Query("search") search?: string) {
         const page = pageQuery ?? 1;
-        return await this.rolesService.getRoles(page);
+        return await this.rolesService.getRoles(page,search);
     }
 
     @Get('/all')

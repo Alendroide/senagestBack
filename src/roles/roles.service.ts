@@ -12,10 +12,11 @@ export class RolesService {
       return { status: 201, message: "Rol created successfully", data: newRole};
   }
 
-  async getRoles(page: number) {
+  async getRoles(page: number, search?: string) {
     const records = 10;
 
     const roles = await this.prismaService.rol.findMany({
+      where: search ? {nombre: {contains: search}} : {},
       take: records,
       skip: (page - 1) * records
     });
