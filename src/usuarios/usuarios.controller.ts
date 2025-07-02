@@ -59,9 +59,9 @@ export class UsuariosController {
     @Get()
     @Permiso(15)
     @UseGuards(PermisosGuard)
-    async getUsuarios(@Query("page", ParseIntPipe) pageQuery: number | undefined) {
+    async getUsuarios(@Query("page", ParseIntPipe) pageQuery: number | undefined, @Query("search") search?: string) {
         const page = pageQuery ?? 1;
-        return await this.usuariosService.getUsuarios(page);
+        return await this.usuariosService.getUsuarios(page, search);
     }
 
     @Patch(":id")

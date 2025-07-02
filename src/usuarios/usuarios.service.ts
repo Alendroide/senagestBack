@@ -134,7 +134,7 @@ export class UsuariosService {
     };
   }
 
-  async getUsuarios(page: number) {
+  async getUsuarios(page: number, search?: string) {
     const records = 10;
 
     const users = await this.prismaService.usuario.findMany({
@@ -155,6 +155,14 @@ export class UsuariosService {
       orderBy: {
         fichaId: 'asc',
       },
+      where: search ? isNaN(parseInt(search)) ? {
+        OR: [
+          {primerNombre: {contains: search}},
+          {segundoNombre: {contains: search}},
+          {primerApellido: {contains: search}},
+          {segundoApellido: {contains: search}}
+        ]
+      } : { identificacion: parseInt(search)} : {},
       take: records,
       skip: (page - 1) * records,
     });
