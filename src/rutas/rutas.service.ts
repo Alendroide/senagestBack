@@ -28,6 +28,7 @@ export class RutasService {
             id: true,
             nombre: true,
             ruta: true,
+            estado: true,
           },
           take: records,
           skip: (page - 1) * records,
