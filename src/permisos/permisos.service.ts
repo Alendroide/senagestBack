@@ -30,9 +30,10 @@ export class PermisosService {
         icono: true,
         nombre: true,
         rutas: {
-          where: search ? { nombre: { contains: search } } : {},
           select: {
-            permisos: true,
+            permisos: {
+              where: search ? { nombre: { contains: search } } : {},
+            },
           },
         },
       },
