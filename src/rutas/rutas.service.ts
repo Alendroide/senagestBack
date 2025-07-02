@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateRutaDto } from './dto/create-ruta.dto';
 import { UpdateRutaDto } from './dto/update-ruta.dto';
@@ -91,6 +91,22 @@ export class RutasService {
   }
 
   async updateStatus(id: number) {
-    return 'In process';
+    const existingRuta = await this.prismaService.rutaFront.findUnique({
+      where: {
+        id
+      }
+    });
+    if (!existingRuta) throw new HttpException({ status: 404, message: "Ruta not found" }, HttpStatus.NOT_FOUND);
+
+    const updatedRuta = await this.prismaService.rutaFront.update({
+      where: {
+        id
+      },
+      data: {
+        estado: !existingRuta.estado
+      }
+    })
+
+    return { status: 200, message: "status updated successfully", data: updatedRuta };
   }
 }
