@@ -22,9 +22,9 @@ export class PermisosController {
     @Get('module/:id')
     @Permiso(6)
     @UseGuards(PermisosGuard)
-    async getPermisos ( @Param('id',ParseIntPipe) id: number, @Query("page",ParseIntPipe) pageQuery : number) {
+    async getPermisos ( @Param('id',ParseIntPipe) id: number, @Query("page",ParseIntPipe) pageQuery : number, @Query("search") search?: string) {
         const page = pageQuery || 1;
-        return await this.permisosService.getPermisos (id, page );
+        return await this.permisosService.getPermisos (id, page, search );
     }
 
     @Patch('update/:id')

@@ -16,7 +16,7 @@ export class PermisosService {
     };
   }
 
-  async getPermisos(id: number, page: number) {
+  async getPermisos(id: number, page: number, search?: string) {
 
     const records = 10;
     const skip = ( page - 1 ) * records;
@@ -30,6 +30,7 @@ export class PermisosService {
         icono: true,
         nombre: true,
         rutas: {
+          where: search ? { nombre: { contains: search } } : {},
           select: {
             permisos: true,
           },
