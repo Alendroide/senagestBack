@@ -38,7 +38,6 @@ CREATE TABLE `ficha` (
 
 LOCK TABLES `ficha` WRITE;
 /*!40000 ALTER TABLE `ficha` DISABLE KEYS */;
-INSERT INTO `ficha` VALUES (2846103,1,1),(2900810,1,1);
 /*!40000 ALTER TABLE `ficha` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -57,7 +56,7 @@ CREATE TABLE `modulo` (
   `estado` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `Modulo_nombre_key` (`nombre`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -144,7 +143,7 @@ CREATE TABLE `rol` (
   `estado` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `Rol_nombre_key` (`nombre`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -153,7 +152,7 @@ CREATE TABLE `rol` (
 
 LOCK TABLES `rol` WRITE;
 /*!40000 ALTER TABLE `rol` DISABLE KEYS */;
-INSERT INTO `rol` VALUES (1,'Administrador','Acceso total al sistema','ShieldUser',1),(2,'Aprendiz','Estudiante del CGDSS','User',1),(13,'Instructor','Encargado de guiar los procesos formativos de los aprendices','Book',1),(14,'Coordinador','Responsable de coordinar las actividades académicas y administrativas','Home',1),(15,'Bienestar','Gestiona programas de apoyo y bienestar para aprendices y funcionarios','ShieldUser',1),(16,'Gestor TIC','Administra los sistemas tecnológicos del centro de formación','Server',1),(17,'Planeación','Encargado de la planificación y evaluación institucional','AppWindow',1),(18,'Gestor Ambiental','Lidera estrategias de sostenibilidad y medio ambiente','Atom',1),(19,'Apoyo Admin','Brinda soporte en procesos administrativos','AlignEndHorizontal',1),(20,'Gestor Emprende','Fomenta la creación de ideas de negocio y proyectos productivos','BadgeDollarSign',1),(21,'SST','Promueve la seguridad y bienestar laboral en el centro','Activity',1),(22,'Control Acceso','Supervisa el ingreso y la seguridad en las instalaciones','Ban',1);
+INSERT INTO `rol` VALUES (1,'Administrador','Acceso total al sistema','ShieldUser',1);
 /*!40000 ALTER TABLE `rol` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -181,7 +180,7 @@ CREATE TABLE `rolpermiso` (
 
 LOCK TABLES `rolpermiso` WRITE;
 /*!40000 ALTER TABLE `rolpermiso` DISABLE KEYS */;
-INSERT INTO `rolpermiso` VALUES (1,1,1),(1,2,1),(2,1,1),(2,2,1),(3,1,1),(3,2,1),(4,1,0),(5,1,0),(6,1,1),(6,2,1),(7,1,0),(8,1,0),(9,1,1),(10,1,1),(11,1,1),(12,1,1),(14,1,1),(14,22,1),(15,1,1),(15,22,1),(16,1,1),(18,1,1),(19,1,1),(20,1,0),(21,1,0);
+INSERT INTO `rolpermiso` VALUES (1,1,1),(2,1,1),(3,1,1),(4,1,1),(5,1,1),(6,1,1),(7,1,1),(8,1,1),(9,1,1),(10,1,1),(11,1,1),(12,1,1),(13,1,1),(14,1,1),(15,1,1),(16,1,1),(17,1,1),(18,1,1),(19,1,1),(20,1,1),(21,1,1);
 /*!40000 ALTER TABLE `rolpermiso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -202,7 +201,7 @@ CREATE TABLE `rutafront` (
   UNIQUE KEY `RutaFront_nombre_key` (`nombre`),
   KEY `RutaFront_moduloId_fkey` (`moduloId`),
   CONSTRAINT `RutaFront_moduloId_fkey` FOREIGN KEY (`moduloId`) REFERENCES `modulo` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -243,7 +242,7 @@ CREATE TABLE `usuario` (
   KEY `Usuario_rolId_fkey` (`rolId`),
   CONSTRAINT `Usuario_fichaId_fkey` FOREIGN KEY (`fichaId`) REFERENCES `ficha` (`codigo`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `Usuario_rolId_fkey` FOREIGN KEY (`rolId`) REFERENCES `rol` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -252,7 +251,7 @@ CREATE TABLE `usuario` (
 
 LOCK TABLES `usuario` WRITE;
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
-INSERT INTO `usuario` VALUES (1,1079534351,'Luis','Alejandro','Bonilla','Echeverri','admin','$2b$10$g5nHMpmQXtMlFwG3paml3.03kOXSgnSwqH/gG63V3qIMQFyVcP4E6',2846103,1,'2005-02-06 17:00:00.000','defaultpfp.png',1),(2,1070598678,'Estefany','Daniela','Parada','Escalante','kesito@gmail.com','$2b$10$Et6e/Saehq06WLeS8THpEujK0etzych9DFBy29Qib8eZnUOd1mzqy',2900810,2,'2007-11-11 23:00:00.000','defaultpfp.png',1);
+INSERT INTO `usuario` VALUES (1,1,'Admin','','Account','','admin','$2b$10$g5nHMpmQXtMlFwG3paml3.03kOXSgnSwqH/gG63V3qIMQFyVcP4E6',NULL,1,'2000-01-01 05:00:00.000','defaultpfp.png',1);
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -265,4 +264,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-06-13 11:03:00
+-- Dump completed on 2025-07-07  8:08:25
