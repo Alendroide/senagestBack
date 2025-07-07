@@ -225,7 +225,7 @@ export class AuthService {
     const user = await this.prismaService.usuario.findUnique({
       where: {correo: email}
     });
-    if(!user) return {status:404, message: "E-mail not registered"};
+    if(!user) throw new HttpException({status:404, message: "E-mail not registered"},HttpStatus.NOT_FOUND);
 
     const token = this.jwtService.sign({email},{expiresIn: '1h'});
 
@@ -247,7 +247,7 @@ export class AuthService {
       if(!payload) return {status: 400, message: "Invalid token"};
       const email = payload.email;
       const hash = await bcrypt.hash(data.password,10);
-      const updatedUser = await this.prismaService.usuario.update({
+      await this.prismaService.usuario.update({
         where: {
           correo: email
         },
@@ -259,7 +259,7 @@ export class AuthService {
     }
     catch(error){
       console.log(error);
-      return {status: 400, message: "Invalid token"};
+      throw new HttpException( {status: 400, message: "Invalid token"},HttpStatus.BAD_REQUEST);
     }
   }
 }
