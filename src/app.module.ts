@@ -10,6 +10,7 @@ import { RolesModule } from './roles/roles.module';
 import { RolpermisoModule } from './rolpermiso/rolpermiso.module';
 import { RutasModule } from './rutas/rutas.module';
 import { ConfigModule } from '@nestjs/config';
+import { FichasModule } from './fichas/fichas.module';
 
 @Module({
   imports: [
@@ -27,7 +28,8 @@ import { ConfigModule } from '@nestjs/config';
     ProgramasModule,
     RolesModule,
     RolpermisoModule,
-    RutasModule
+    RutasModule,
+    FichasModule
   ],
 })
 export class AppModule {}
