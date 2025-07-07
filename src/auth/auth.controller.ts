@@ -18,4 +18,14 @@ export class AuthController {
         const rolId: number | undefined = req.user.rol;
         return this.authService.refetchPermisos(rolId);
     }
+
+    @Post('forgot-password')
+    async forgotPassword(@Body() {email} : {email: string}){
+        return await this.authService.forgotPassword(email);
+    }
+
+    @Post('reset-password')
+    async resetPassword(@Body() data: {token: string, password: string}){
+        return await this.authService.resetPassword(data);
+    }
 }

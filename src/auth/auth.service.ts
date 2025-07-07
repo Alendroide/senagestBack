@@ -1,16 +1,19 @@
 import * as bcrypt from 'bcrypt';
+import * as nodemailer from 'nodemailer';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './types/jwtPayload';
 import { Modulo } from './types/Modulo';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
   constructor(
     private prismaService: PrismaService,
     private jwtService: JwtService,
+    private configService: ConfigService
   ) { }
 
   async comparePasswords(password: string, hash: string): Promise<boolean> {
@@ -190,5 +193,73 @@ export class AuthService {
     }) : undefined;
 
     return { status: 200, message: "User permisos fetched successfully", modulos };
+  }
+
+  async sendEmail(email: string, subject: string, html: string) {
+    const transporter = nodemailer.createTransport({
+      service: this.configService.get<string>('MAILER_SERVICE'),
+      auth: {
+        user: this.configService.get<string>('MAILER_USER'),
+        pass: this.configService.get<string>('MAILER_PASS'),
+      },
+    });
+
+    const mailOptions = {
+      from: this.configService.get<string>('MAILER_USER'),
+      to: email,
+      subject,
+      html,
+    };
+
+    transporter.sendMail(mailOptions, function (error: any, info: any) {
+      if (error) {
+        console.log('Error:', error);
+      } else {
+        return info.response;
+      }
+    });
+  }
+
+  async forgotPassword(email: string){
+    
+    const user = await this.prismaService.usuario.findUnique({
+      where: {correo: email}
+    });
+    if(!user) return {status:404, message: "E-mail not registered"};
+
+    const token = this.jwtService.sign({email},{expiresIn: '1h'});
+
+    const HOST = this.configService.get<string>("FRONTHOST");
+    const PORT = this.configService.get<string>("FRONTPORT");
+
+    this.sendEmail(
+      email,
+      "Reestablecimiento de contraseña - SENAGEST",
+      `<h1>Para reestablecer su contraseña, haga click aquí</h1><a href='http://${HOST}:${PORT}/reset-password?token=${token}'>Reestablecer contraseña</a>`
+    )
+
+    return {status: 200, message: "Mail sent, check your E-mail"}
+  }
+
+  async resetPassword(data: {token: string, password: string}){
+    try{
+      const payload = this.jwtService.verify(data.token);
+      if(!payload) return {status: 400, message: "Invalid token"};
+      const email = payload.email;
+      const hash = await bcrypt.hash(data.password,10);
+      const updatedUser = await this.prismaService.usuario.update({
+        where: {
+          correo: email
+        },
+        data: {
+          contrasena: hash
+        }
+      })
+      return {status: 200, message: "Password updated successfully"};
+    }
+    catch(error){
+      console.log(error);
+      return {status: 400, message: "Invalid token"};
+    }
   }
 }
