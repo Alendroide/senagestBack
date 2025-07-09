@@ -275,11 +275,22 @@ export class UsuariosService {
                   },
                 },
               },
+              take: 8
             },
           },
         },
       },
     });
+
+    const numberOfPermissions = user?.rol?.id ? await this.prismaService.permiso.count({
+      where: {
+        roles: {
+          some: {
+            rolId: user.rol.id
+          }
+        }
+      }
+    }) : 0;
 
     const userParsed = {
       ...user,
@@ -287,6 +298,7 @@ export class UsuariosService {
       rol: user?.rol ? {
         ...user.rol,
         permisos: user.rol.permisos.map((permiso) => permiso.permiso),
+        numberOfPermissions
       } : undefined,
     };
 
