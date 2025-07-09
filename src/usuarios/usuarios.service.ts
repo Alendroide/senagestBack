@@ -54,6 +54,27 @@ export class UsuariosService {
     });
   }
 
+  async updateProfilePicture (userId: number, file: Express.Multer.File) {
+    try{
+      await this.prismaService.usuario.update({
+        where: {
+          id: userId
+        },
+        data: {
+          img: `resize-${file.filename}`
+        }
+      });
+
+      return {
+        status: 200,
+        message: 'Profile picture updated successfully',
+      };
+    }
+    catch(error){
+      console.log(error);
+    }
+  }
+
   async createUsuario(
     data: CreateUsuarioDto,
     file: Express.Multer.File | undefined,

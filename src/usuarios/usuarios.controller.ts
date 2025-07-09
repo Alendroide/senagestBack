@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, Query, Request, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, HttpStatus, Param, ParseIntPipe, Patch, Post, Query, Request, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { UsuariosService } from './usuarios.service';
 import { PermisosGuard } from 'src/auth/guards/permisos.guard';
@@ -21,6 +21,38 @@ export class UsuariosController {
     getProfile(@Request() req: any) {
         const userId = req.user.sub;
         return this.usuariosService.getProfile(userId);
+    }
+
+    @Post('update/profile-picture')
+    @UseInterceptors(FileInterceptor('img', {
+        storage: diskStorage({
+            destination: './uploads',
+            filename: (req, file, callback) => {
+                const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+                const ext = extname(file.originalname);
+                const filename = `${file.fieldname}-${uniqueSuffix}${ext}`;
+                callback(null, filename);
+            }
+        })
+    }))
+    async updateProfilePicture(@Request() req: any, @UploadedFile() file?: Express.Multer.File): Promise<any> {
+        if(file){
+            await sharp(file.path)
+                .resize(500, 500, {
+                    fit: 'cover',
+                    withoutEnlargement: false,
+                })
+                .png({compressionLevel: 9})
+                .toFile(`./uploads/resize-${file.filename}`);
+            try{
+                await fs.unlink(file.path);
+            }
+            catch(error){
+                console.log(error);
+            }
+        } else throw new HttpException({status: 400, message: "No image provided"}, HttpStatus.BAD_REQUEST);
+        const userId = req.user.sub;
+        return await this.usuariosService.updateProfilePicture(userId, file);
     }
 
     @Post()
