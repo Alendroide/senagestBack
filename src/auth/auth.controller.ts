@@ -2,6 +2,7 @@ import { Body, Controller, Get, Post, Request, UseGuards } from '@nestjs/common'
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -25,7 +26,7 @@ export class AuthController {
     }
 
     @Post('reset-password')
-    async resetPassword(@Body() data: {token: string, password: string}){
+    async resetPassword(@Body() data: ResetPasswordDto){
         return await this.authService.resetPassword(data);
     }
 }
