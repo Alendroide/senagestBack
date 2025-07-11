@@ -7,6 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './types/jwtPayload';
 import { Modulo } from './types/Modulo';
 import { ConfigService } from '@nestjs/config';
+import { UpdatePasswordDto } from './dto/update-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -261,5 +262,32 @@ export class AuthService {
       console.log(error);
       throw new HttpException( {status: 400, message: "Invalid token"},HttpStatus.BAD_REQUEST);
     }
+  }
+
+  async updatePassword(data: UpdatePasswordDto, userId: number){
+    const user = await this.prismaService.usuario.findUnique({
+      where: {
+        id: userId
+      }
+    });
+
+    if(!user) throw new HttpException({status: 404, message: "This userId is invalid, contact support"}, HttpStatus.NOT_FOUND);
+
+    const verifyPassword = await bcrypt.compare(data.oldPassword, user.contrasena);
+    if(!verifyPassword) throw new HttpException({status: 400, message: "Wrong password"}, HttpStatus.BAD_REQUEST);
+
+    const newHashedPassword = await bcrypt.hash(data.newPassword,10);
+
+    const updatedUser = await this.prismaService.usuario.update({
+      where: {
+        id: userId
+      },
+      data: {
+        contrasena: newHashedPassword
+      }
+    })
+
+    return {status:200, message: "Password updated successfully", data: {...updatedUser, identificacion: `${updatedUser.identificacion}`}};
+
   }
 }
