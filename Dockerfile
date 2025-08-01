@@ -7,7 +7,6 @@ RUN npm install
 # Bundle app source
 EXPOSE 3000
 COPY . .
-ENV PORT=3000
 # Build
 RUN npx prisma generate
 RUN npm run build

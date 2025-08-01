@@ -19,6 +19,7 @@ model Programa {
   abreviacion String @db.VarChar(10) @unique
   fichas Ficha[]
   estado Boolean @default(true)
+  @@map("programa")
 }
 
 model Ficha {
@@ -27,6 +28,7 @@ model Ficha {
   programa Programa @relation(fields: [programaId], references: [id])
   usuarios Usuario[]
   estado Boolean @default(true)
+  @@map("ficha")
 }
 
 model Usuario {
@@ -45,6 +47,7 @@ model Usuario {
   ficha Ficha? @relation(fields: [fichaId], references: [codigo])
   rol Rol? @relation(fields: [rolId], references: [id])
   estado Boolean @default(true)
+  @@map("usuario")
 }
 
 model Rol {
@@ -55,6 +58,7 @@ model Rol {
   usuarios Usuario[]
   permisos RolPermiso[]
   estado Boolean @default(true)
+  @@map("rol")
 }
 
 model RolPermiso {
@@ -64,6 +68,7 @@ model RolPermiso {
   rol Rol @relation(fields: [rolId], references: [id])
   valor Boolean @default(false)
   @@id([permisoId,rolId])
+  @@map("rolpermiso")
 }
 
 enum tipoPermiso {
@@ -82,6 +87,7 @@ model Permiso {
   ruta RutaFront @relation(fields: [rutaId], references: [id])
   roles RolPermiso[]
   estado Boolean @default(true)
+  @@map("permiso")
 }
 
 model Modulo {
@@ -91,6 +97,7 @@ model Modulo {
   icono String @default("Book")
   rutas RutaFront[]
   estado Boolean @default(true)
+  @@map("modulo")
 }
 
 model RutaFront {
@@ -101,4 +108,5 @@ model RutaFront {
   moduloId Int
   modulo Modulo @relation(fields: [moduloId], references: [id])
   estado Boolean @default(true)
+  @@map("rutafront")
 }
